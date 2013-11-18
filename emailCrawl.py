@@ -42,28 +42,25 @@ def getAvailableMail(mailbox_object):
             #The first segment contains the message ID '1' and the character set 'RFC822' - the next segment is the e-mail text
             #So [0][1] simply returns the e-mail text
 
-            #Add just the body of each e-mail message to a table and when finished return said table.
-            parsed_email = getBodyFromMailMessage(data[0][1])
-            table_to_return.append(parsed_email)
+            #Add just the text of each e-mail message to a table and when finished return said table.
+            table_to_return.append(data[0][1])
 
     return (table_to_return)
 
-def getBodyFromMailMessage(mail_message):
-    #Used pythons email parser and chop down the ridiculousness that is e-mail by just getting the body
-    parsed_message = email.message_from_string(mail_message)
-    if parsed_message.is_multipart():  #All of these e-mails will be multipart but just in case
-        return ( parsed_message.get_payload(0) )
-    else
-        return (parsed_message.get_payload() )
+def getBodiesFromMailTable(inbox_messages):
+    for message in inbox_messages:
+        parsedMessage = email.message_from_string(message)
+        if parsedMessage.get_content_maintype() == "multipart":
+            for part in parsedMessage.get_payload():
+
+
+
+
 
 
 mailbox = connectToMailbox()
 current_inbox = getAvailableMail(mailbox)
-
-for thing in current_inbox:
-    print thing
-
-
+getBodiesFromMailTable(current_inbox)
 
 
 
