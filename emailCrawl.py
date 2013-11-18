@@ -84,7 +84,7 @@ def filterURLS(mail_message):
 
 
 
-def processEmailInbox():
+def queueAllEmailInbox():
     try:
         mailbox = connectToMailbox()   #Connect to the gmail inbox
         current_inbox = getAvailableMail(mailbox)  #Get
@@ -96,5 +96,25 @@ def processEmailInbox():
                     downloader.queueDownload(sub_url)
             else: #Only one download URL in the e-mail, queue it up
                 downloader.queueDownload(url[0])
+    except:
+        return (False)
+
+
+def listAllEmails():
+    try:
+        mailbox = connectToMailbox()   #Connect to the gmail inbox
+        current_inbox = getAvailableMail(mailbox)  #Get
+        returned_list = []
+
+        #Queue up each of the URLS in the inbox for download
+        for url in current_inbox:
+            if len(url) > 1:  #If the current URL is actually a list of URLS then process each URL
+                for sub_url in url:
+                    returned_list.append(sub_url)
+            else: #Only one download URL in the e-mail, queue it up
+                returned_list.append(url[0])
+
+        print(returned_list)
+        #return(returned_list)
     except:
         return (False)
