@@ -11,5 +11,5 @@ test = "http://netstorage.unity3d.com/unity/UnitySetup-4.3.0.exe"
 #    filename = wget.download(url, bar=current)
 #    return filename
 
-filename = wget.download(test)
+filename = wget.download(test, "bar_adaptive")
 print filename
