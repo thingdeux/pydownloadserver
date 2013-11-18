@@ -114,7 +114,6 @@ def listAllEmails():
             else: #Only one download URL in the e-mail, queue it up
                 returned_list.append(url[0])
 
-        print(returned_list)
-        #return(returned_list)
+        return(returned_list)
     except:
         return (False)
