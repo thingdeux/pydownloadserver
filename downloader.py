@@ -17,11 +17,10 @@ import subprocess
 
 
 
-#def queueDownload(url):
-#    filename = wget.download(url, bar=current)
-#    return filename
+def queueDownload(url):
+    print("Downloading: " + url)
+    #test_url = "http://netstorage.unity3d.com/unity/UnitySetup-4.3.0.exe"
+    #downloaded_file = requests.get(url)
 
 
-test_url = "http://netstorage.unity3d.com/unity/UnitySetup-4.3.0.exe"
 
-downloaded_file = requests.get(test_url)

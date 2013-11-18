@@ -1,13 +1,14 @@
 #Connect  |  Verify Inbox connectivity | check for new e-mails | check the first e-mail for something that looks like a URL |
 # if there's a URL try to download it.  | if there's not  move on
 
-#E-mail account: pydownloadserver@gmail.com
-#Birthdate: January 1 1901
-
 import imaplib
 import email
+import re
+import downloader
 
 #E-mail auth information for the pydownloadserver@gmail.com inbox
+#E-mail account: pydownloadserver@gmail.com
+#Birthdate: January 1 1901
 email_username = "pydownloadserver"
 email_password = "Kaiser123"
 imap_host_name = "imap.gmail.com"
@@ -28,7 +29,7 @@ def connectToMailbox():
 def getAvailableMail(mailbox_object):
     mailbox_object.select()
     valid_message, data = mailbox_object.search(None, 'ALL')
-    table_to_return = []
+    list_to_return = []
 
     #For some reason the number of messages in the inbox is returned as just one string so if there are 3 messages the string is
     # '1 2 3' - so I have to run the split command to properly iterate over the inboxes messages
@@ -41,11 +42,17 @@ def getAvailableMail(mailbox_object):
             #The first segment contains the message ID '1' and the character set 'RFC822' - the next segment is the e-mail text
             #So [0][1] simply returns the e-mail text
 
-            #Add just the body of each e-mail message to a table and when finished return said table.
-            parsed_email = getBodyFromMailMessage(data[0][1])
-            table_to_return.append(parsed_email)
+            #find just the body of each e-mail message
+            parsed_email_body = getBodyFromMailMessage(data[0][1])
+            #use regex to find a url
+            filtered_url = filterURLS(parsed_email_body)
 
-    return (table_to_return)
+            #If an actual url is found then add it to the table_to_return list
+            if len(filtered_url) > 0:
+                list_to_return.append(filtered_url)
+
+    #Return a list of
+    return (list_to_return)
 
 def getBodyFromMailMessage(mail_message):
     #Used pythons email parser and chop down the ridiculousness that is e-mail by just getting the body
@@ -55,12 +62,39 @@ def getBodyFromMailMessage(mail_message):
     else:
         return (parsed_message.get_payload() )
 
+def filterURLS(mail_message):
 
-mailbox = connectToMailbox()
-current_inbox = getAvailableMail(mailbox)
+    try:
+        parse_criteria = re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+        found_urls = parse_criteria.findall(str(mail_message) )
+        number_of_returned_urls = len(found_urls)
 
-for test_email in current_inbox:
-    print test_email
+        #If an e-mail has more than one download url in it - return the list of urls
+        if number_of_returned_urls > 1:
+            list_to_return = []
+            for url in found_urls:
+                list_to_return.append(url)
+
+            return (list_to_return)
+        else:
+            return ( found_urls  )
+
+    except:
+        return (False)
 
 
-#queueDownload(url) function from Jasons file to queue a download
+
+def processEmailInbox():
+    try:
+        mailbox = connectToMailbox()   #Connect to the gmail inbox
+        current_inbox = getAvailableMail(mailbox)  #Get
+
+        #Queue up each of the URLS in the inbox for download
+        for url in current_inbox:
+            if len(url) > 1:  #If the current URL is actually a list of URLS then process each URL
+                for sub_url in url:
+                    downloader.queueDownload(sub_url)
+            else: #Only one download URL in the e-mail, queue it up
+                downloader.queueDownload(url[0])
+    except:
+        return (False)
