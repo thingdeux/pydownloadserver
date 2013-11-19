@@ -1,29 +1,36 @@
 import cherrypy
 import emailCrawl
+from mako.template import Template
 
-cherrypy.config.update({ 'server.socket_host': '127.0.0.1',
+# bind to all IPv4 interfaces and set port
+cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
                          'server.socket_port': 12334,
                          })
 
 
 
-class HelloWorld(object):
+class webServer(object):
 
-
-    @cherrypy.expose
 
     def index(self):
-        #host = cherrypy.request.headers['Host']
+        mako_template = Template(filename='static/index.html')
         current_emails = emailCrawl.listAllEmails()
-        builtPage = "<!DOCTYPE html> <html> <body> <h4> Inbox Downloads To Queue:</h4><ul>"
+        mako_template_render = mako_template.render(inbox_urls = current_emails)
 
-        for download_url in current_emails:
-            builtPage = builtPage + "<li>" + str(download_url) + "</li>"
-
-        builtPage = builtPage + "</ul></body></html>"
-
-        return (builtPage)
-    #index.exposed = True
+        return mako_template_render
 
 
-cherrypy.quickstart(HelloWorld())
+
+    def history(self):
+        return "History will go here"
+
+
+
+
+    index.exposed = True
+    history.exposed = True
+
+
+
+
+cherrypy.quickstart(webServer())
