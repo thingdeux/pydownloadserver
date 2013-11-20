@@ -1,12 +1,7 @@
-#pyDownloadServer - Python web daemon that accepts 
-Library Requirements: mako, cherrypy
-
-#Run pyDownloader.py to start cherrypy server, port: 12334
-
-
+#pyDownloadServer - Python web downloader
 
 #Current Dev Notes
-**pyDownloader** (Web Daemon) - run to start web server
+**pyDownloader** (Web Daemon) - Run pyDownloader.py to start cherrypy server, port: 12334
 
 **emailCrawl.py** (e-mail crawling helper)
     -queueAllEmailInbox() - function to use to kickoff crawling of e-mail inbox,
@@ -14,4 +9,6 @@ Library Requirements: mako, cherrypy
     -listAllEmails() - function to return a list of all found urls in the inbox
 
 **myDownload.py** (class definition)
+
+Library Requirements: mako, cherrypy
 	

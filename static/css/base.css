@@ -1,0 +1,16 @@
+body 
+{			
+	background-color:white;
+}
+
+#downloadBox 
+{		
+	margin: auto;	
+	width: 100;	
+
+}
+#queueTable
+{		
+	border-color: blue;
+	table-layout:auto;	
+;}
