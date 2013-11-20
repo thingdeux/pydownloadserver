@@ -7,12 +7,11 @@ __author__ = 'jason'
 #Feature request: Each download should run on its own subprocess
 
 
-import myDownload, threading
+import myDownload, threading, thread
 
 def queueDownload(url):
 
     downloadFileName = url.split('/')[-1] #Gather the file name from the URL
-
 
 
 #STATIC TEST DATA=======

@@ -39,9 +39,6 @@ class myDownload(threading.Thread):
             self.__saveToFile()
 
     def getProgress(self):
-        #Place holder for progress call
-
-        print self.response.info()
         try:
             total_size = self.response.info().getheader('Content-Length').strip()
             total_size = int(total_size)
