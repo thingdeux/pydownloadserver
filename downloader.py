@@ -21,24 +21,19 @@ test_filename1 = test_url1.split('/')[-1]
 test_filename2 = test_url2.split('/')[-1]
 #=======================
 
-#Creates
-thread1 = myDownload(test_url1, test_filename1)
-thread2 = myDownload(test_url2, test_filename2)
+#Creates 2 thread objects with the myDownload class.
+thread1 = myDownload.myDownload(test_url1, test_filename1)
+thread2 = myDownload.myDownload(test_url2, test_filename2)
 
-
-for item in downloads:
-
-
+#starts my test threads
 thread1.start()
 thread2.start()
 
-
+#sleeps for a bit
 time.sleep(10)
 
+##tests the get process functions
 print thread1.filename
 thread1.getProgress()
 print thread2.filename
 thread2.getProgress()
-
-time.sleep(10)
-
