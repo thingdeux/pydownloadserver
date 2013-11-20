@@ -1,16 +1,13 @@
 __author__ = 'jason'
 
-#http://docs.python-requests.org/en/latest/index.html  -- The requests library
-#do a pip install requests before running this
-
 #Feature request: Each download should run on its own subprocess
 
 #test_url = "http://netstorage.unity3d.com/unity/UnitySetup-4.3.0.exe"
 #test_url = "http://www.google.com"
 
-#downloaded_file = requests.get(test_url)
 
-import urllib2, threading
+import urllib2
+import threading 
 
 
 class myDownload(threading.Thread):
@@ -18,6 +15,7 @@ class myDownload(threading.Thread):
         threading.Thread.__init__(self)
         self.url = url
         self.filename = filename
+        self.location_to_save = "C:\Development\Python\Junk\shitfile.exe" #Change or make passable
         self.progress = None
         self.response = None
 
@@ -26,23 +24,30 @@ class myDownload(threading.Thread):
         return code
 
     def __saveToFile(self):
-        data = self.response.read()
-        chunk_size = 2 * 1024
-        with open(self.filename, "wb") as download:
-            while True:
-                print "we're successfully in write mode"
-                chunk = data.read(chunk_size)
-                if not chunk: break
-                download.write(chunk)
+        #Some code here? Maybe pass the data over from run if you want to split them into two
+        return False
 
     def run(self):
-        print self.filename + " is running"
-        self.response = urllib2.urlopen(self.url)
-        if not self.__getResponsecode() == 200:
-            self.progress = self.__getResponsecode()
-        else:
-            print self.__getResponsecode()
-            self.__saveToFile()
+        #print self.filename + " is running"
+        #self.response = urllib2.urlopen(self.url)  #You did a blind read here
+        #if not self.__getResponsecode() == 200:
+            #self.progress = self.__getResponsecode()
+        #else:
+            #print self.__getResponsecode()
+            #self.__saveToFile()
+
+        #The following breaks down any downloading into memory manageable 32MB chunks. 
+        self.response = urllib2.urlopen(self.url)       
+        downloadable_chunk_size = 16*32768
+        
+        with open(self.location_to_save, 'wb') as file_object:
+            while True:     
+                chunk_size = self.response.read(CHUNK)     
+                if not downloadable_chunk_size: break                
+                file_object.write(downloadable_chunk_size)
+
+
+
 
     def getProgress(self):
         try:

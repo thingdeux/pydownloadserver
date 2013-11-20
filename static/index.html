@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <style>
-        body {background-color:white;}
-        p {color:black;}
-    </style>
+<head>    
+    <link rel="stylesheet" href="/static/css/base.css" type="text/css">
 </head>
-<body>
-    <h4> Current Inbox Urls</h4>
+<body>	
+	<div id = "downloadBox">
+		<form name="input" action="testFunction" method="post">
 
-    <ul>
-        %for url in inbox_urls:
-        <li>${url}</li>
-        %endfor
-    </ul>
+			<input type="text" name="downloadURL>">
+			<input type = "submit" value = "Queue">
+
+		</form>
+	</div>
+
+    <div id="queueTable">
+	    <table border = "1";>	    	
+	    	<th>Jobs waiting in inbox</th>
+		        %for url in inbox_urls:
+		        <tr>
+		        	<td>${url}</td>
+		        </tr>
+		        %endfor
+	    	</tr>
+	    </table>
+	</div>
 
 </body>
 </html>
