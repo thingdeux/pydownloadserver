@@ -27,15 +27,21 @@ class myDownload(threading.Thread):
 
     def __saveToFile(self):
         data = self.response.read()
+        chunk_size = 2 * 1024
         with open(self.filename, "wb") as download:
-            download.write(data)
+            while True:
+                print "we're successfully in write mode"
+                chunk = data.read(chunk_size)
+                if not chunk: break
+                download.write(chunk)
 
     def run(self):
-        print self.filename
+        print self.filename + " is running"
         self.response = urllib2.urlopen(self.url)
         if not self.__getResponsecode() == 200:
             self.progress = self.__getResponsecode()
         else:
+            print self.__getResponsecode()
             self.__saveToFile()
 
     def getProgress(self):
