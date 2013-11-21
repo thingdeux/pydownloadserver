@@ -3,7 +3,7 @@ body {
 }
 
 #container{	
-			
+	margin-top: 2%;		
 }
 
 #downloadBox {				
@@ -25,13 +25,24 @@ body {
 	text-align: center;	
 }
 
-
 .smallpy{
 	font-size: 25px;
 	color: green;
-
+	margin-right: -.2%;		
 }
 
 .bigpy{
 	font-size: 30px;
+	font-weight: 600;
 }
+
+a.smallpylink:link {text-decoration: none; color:green;}
+a.smallpylink:visited {text-decoration: none; color:green;}
+a.smallpylink:hover {text-decoration: none; color:green;}
+a.smallpylink:active {text-decoration: none; color:green;}
+
+a.bigpylink:link {text-decoration: none; color:black;}
+a.bigpylink:visited {text-decoration: none; color:black;}
+a.bigpylink:hover {text-decoration: none; color:black;}
+a.bigpylink:active {text-decoration: none; color:black;}
+

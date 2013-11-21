@@ -62,7 +62,7 @@ class webServer(object):
         #[0] = Filename | [1] =Download Status | [2] = 'Queue Time'
         thequeue = [ ["Unity3D.exe", 40, "1/16/13"],
                    ["DirectX9.0.0.120.exe", 20, "1/18/13"],
-                   ["Unity3D.exe", 0, "1/20/13"] ] 
+                   ["SomePorn.xxx", 0, "1/20/13"] ] 
 
         #Render the mako template and pass it the current_emails list variable
         mako_template_render = mako_template.render(queued_files = thequeue)
