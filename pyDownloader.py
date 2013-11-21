@@ -56,7 +56,7 @@ class webServer(object):
 
     @cherrypy.expose
     def queue(self):       
-        #Create the below template using index.html (and looking up in the static folder)
+        #Create the below template using queue.html (and looking up in the static folder)
         mako_template = Template(filename='static/queue.html')
         
         #[0] = Filename | [1] =Download Status | [2] = 'Queue Time'
@@ -68,7 +68,16 @@ class webServer(object):
         mako_template_render = mako_template.render(queued_files = thequeue)
 
         return mako_template_render
+
+    @cherrypy.expose
+    def config(self):
+        #Create the below template using config.html (and looking up in the static folder)
+        mako_template = Template(filename='static/config.html')
         
+        #Render the mako template
+        mako_template_render = mako_template.render()
+
+        return mako_template_render
 
     #index.exposed = True
     #history.exposed = True    
