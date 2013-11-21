@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>    
+    <link rel="stylesheet" href="/static/css/base.css" type="text/css">
+</head>
+
+<body><div id = "container">
+
+	<div id="queueTable">
+	    <table border = "1">	    	
+	    	<th id = "statusTableHeader">Filename</th>
+	    	<th id = "statusTableHeader">Status</th>
+	    	<th id = "statusTableHeader">Date Queued</th>
+		        %for filename, status, time in queued_files:
+		        <tr>
+		        	<td>${filename}</td>
+		        	<td>${status}%</td>
+		        	<td>${time}</td>
+		        </tr>
+		        %endfor
+	    	</tr>
+	    </table>
+
+
+
+<body></div>

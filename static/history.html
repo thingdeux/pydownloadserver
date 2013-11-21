@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>    
+    <link rel="stylesheet" href="/static/css/base.css" type="text/css">
+</head>
+
+<body><div id = "container">
+
+	<div id="queueTable">
+	    <table border = "1">	    	
+	    	<th id = "statusTableHeader">Jobs waiting in inbox</th>
+		        %for url in inbox_urls:
+		        <tr>
+		        	<td>${url}</td>
+		        </tr>
+		        %endfor
+	    	</tr>
+	    </table>
+
+
+
+<body></div>
