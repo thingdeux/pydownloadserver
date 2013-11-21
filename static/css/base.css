@@ -1,16 +1,37 @@
-body 
-{			
-	background-color:white;
+body {			
+	background-color:white;	
 }
 
-#downloadBox 
-{		
-	margin: auto;	
-	width: 100;	
+#container{	
+			
+}
+
+#downloadBox {				
+	margin: 0% 0% 0% 0%;
 
 }
-#queueTable
-{		
+#queueTable{		
 	border-color: blue;
 	table-layout:auto;	
-;}
+	
+}
+
+
+#statusTableHeader{	
+	font-size: large;
+	background-color: #33CCFF;
+	font-weight: bold;
+	color:  #E3FFFF;
+	text-align: center;	
+}
+
+
+.smallpy{
+	font-size: 25px;
+	color: green;
+
+}
+
+.bigpy{
+	font-size: 30px;
+}

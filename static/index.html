@@ -2,28 +2,22 @@
 <html>
 <head>    
     <link rel="stylesheet" href="/static/css/base.css" type="text/css">
+    
+    <span class = "smallpy">py</span><span class="bigpy">Downloader</span>
 </head>
-<body>	
-	<div id = "downloadBox">
-		<form name="input" action="testFunction" method="post">
+<body>
 
-			<input type="text" name="downloadURL>">
-			<input type = "submit" value = "Queue">
+	<div id = "container">
+		<div id = "downloadBox">
+			<form name="input" action="testFunction" method="post">
 
-		</form>
+				<input type="text" name="downloadURL>">
+				<input type = "submit" value = "Queue">
+
+			</form>
+		</div>
+    
 	</div>
 
-    <div id="queueTable">
-	    <table border = "1";>	    	
-	    	<th>Jobs waiting in inbox</th>
-		        %for url in inbox_urls:
-		        <tr>
-		        	<td>${url}</td>
-		        </tr>
-		        %endfor
-	    	</tr>
-	    </table>
-	</div>
-
-</body>
+</div></body>
 </html>

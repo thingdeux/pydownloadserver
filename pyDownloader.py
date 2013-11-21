@@ -1,6 +1,5 @@
 import cherrypy
 import emailCrawl
-import conf
 import os
 from mako.template import Template
 from mako.lookup import TemplateLookup
@@ -32,6 +31,17 @@ class webServer(object):
     def index(self):       
         #Create the below template using index.html (and looking up in the static folder)
         mako_template = Template(filename='static/index.html')
+        
+        #Render the mako template and pass it the current_emails list variable
+        mako_template_render = mako_template.render()
+
+        return mako_template_render
+
+
+    @cherrypy.expose
+    def history(self):
+        #Create the below template using history.html (and looking up in the static folder)
+        mako_template = Template(filename='static/history.html')
 
         #Run the python command listAllEmails (from emailCrawl.py) to receive a python list of urls from the inbox.
         #current_emails = emailCrawl.listAllEmails()  
@@ -44,10 +54,21 @@ class webServer(object):
 
         return mako_template_render
 
-
     @cherrypy.expose
-    def history(self):
-        return "History will go here"
+    def queue(self):       
+        #Create the below template using index.html (and looking up in the static folder)
+        mako_template = Template(filename='static/queue.html')
+        
+        #[0] = Filename | [1] =Download Status | [2] = 'Queue Time'
+        thequeue = [ ["Unity3D.exe", 40, "1/16/13"],
+                   ["DirectX9.0.0.120.exe", 20, "1/18/13"],
+                   ["Unity3D.exe", 0, "1/20/13"] ] 
+
+        #Render the mako template and pass it the current_emails list variable
+        mako_template_render = mako_template.render(queued_files = thequeue)
+
+        return mako_template_render
+        
 
     #index.exposed = True
     #history.exposed = True    
