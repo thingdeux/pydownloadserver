@@ -6,12 +6,6 @@ body {
 	margin-top: 2%;	
 }
 
-#goodieBox {						
-	position: relative;
-	margin-left: 31%;
-	top: -72px;	
-	left: -15px;
-}
 #navigation {			
 	position: relative;	
 	left: 25%;	
@@ -20,12 +14,20 @@ body {
 	color: green;
 	z-index: 2;
 }
-
+#goodieBox {						
+	position: relative;
+	margin-left: 31%;
+	top: -72px;	
+	left: 45px;
+}
 #queueTable{
 	position: relative;
-	table-layout:auto;
-	color:black;
-	z-index: 2;		
+	table-layout:fixed;
+	min-width: 500px;
+	max-width: 500px;
+	width: 500px;	
+	color: black;
+	z-index: 2;
 }
 
 
@@ -33,10 +35,11 @@ body {
 
 #statusTableHeader{	
 	font-size: large;
-	background-color: green;
+	background-color: green;	
 	font-weight: bold;
-	color:  #E3F8E3;
-	text-align: center;	
+	min-width: 120px;	
+	max-width: 400px;
+	color:  #E3F8E3;	
 	z-index: 2;
 }
 
@@ -54,6 +57,25 @@ body {
 	position: relative;	
 	text-align: center;	
 	margin-top: 10px;		
+}
+#saveConfigButton {
+	position: relative;
+	margin-top: 6px;
+	font-size: 9px;
+}
+
+#configContainer {
+	position: relative;	
+	min-width: 300px;
+	max-width: 500px;
+	width: 500px;	
+}
+
+#configBoxes{	
+	color:black;	
+	font-size: 10px;		
+	min-width: 200px;
+	max-width: 200px;
 }
 
 .smallpy{

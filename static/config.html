@@ -4,30 +4,44 @@
     <link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
 
-    <a href="index" class='smallpylink'>
-    	<span class="smallpy">py</span>        
-    </a>
-
-    <a href="index" class='bigpylink'>
-   		<span class="bigpy">Downloader</span>
-   	</a> 
+    <a href="index" class='smallpylink'><span class="smallpy">py</span></a>
+    <a href="index" class='bigpylink'><span class="bigpy">Downloader</span></a> 
 </head>
 
 <body>
 	<div id = "container">
 		<div id = "navigation">
-			<a href="index" class="smallpylink">Home</a><br>
-			<a href="queue" class="smallpylink">Queue</a><br>
-			<a href="history" class="smallpylink">History</a><br>
-			<span style="color:black">Config<br></span>
-		</div>
-		
-		<div id = "goodieBox">
-			Ummmmm Config stuff goes here
+			<a href="index" class="smallpylink">Home<br></a>
+			<a href="queue" class="smallpylink">Queue<br></a>
+			<a href="history" class="smallpylink">History<br></a>
+			<span style="color:black">Config<br></a></span>
 		
 		
+			<div id = "goodieBox">
+				<div id = "configContainer">
+					<form name = "config" method="post">
+						
+						<div id="configBoxes">
+							<table>
+								<th>General:</th>
+								<tr><td>Gmail Username: </td> 
+									<td><input type="text" size=20 name="configGmailUsername>"></input></td></tr>
+										<tr><td>Gmail Password: </td>
+									<td><input type="password" size=20 name="configGmailPassword>"></input></td></tr>
+								<tr><td>Download Location: </td>
+									<td><input type="text" size=20 name="downloadLocation>"></input></td></tr>
+								<tr><td>Other Thing: </td>
+									<td><input type="text" size=20 name="downloadURL>"></td></tr>
 
+							</table>													
+						</div>						
+						<div id="saveConfigButton">
+							<input type = "submit" value = "Save">
+						</div>
+					</form>
 
+				</div>					
+			</div>
 		</div>
 	</div>
 <body>
