@@ -3,37 +3,68 @@ body {
 }
 
 #container{	
-	margin-top: 2%;		
+	margin-top: 2%;	
 }
 
-#downloadBox {				
-	margin: 0% 0% 0% 0%;
+#goodieBox {						
+	position: relative;
+	margin-left: 31%;
+	top: -48px;
+	left: 48px;
+}
+#navigation {			
+	position: relative;	
+	left: 25%;	
+	min-width: 48px;
+	max-width: 48px;	
+	color: green;
+	z-index: 2;
+}
 
+#queueTable{
+	position: relative;
+	table-layout:auto;
+	color:black;
+	z-index: 2;		
 }
-#queueTable{		
-	border-color: blue;
-	table-layout:auto;	
-	
-}
+
+
 
 
 #statusTableHeader{	
 	font-size: large;
-	background-color: #33CCFF;
+	background-color: green;
 	font-weight: bold;
-	color:  #E3FFFF;
+	color:  #E3F8E3;
 	text-align: center;	
+	z-index: 2;
+}
+
+#inputBox {			
+	margin-bottom: 0.5%;
+	position: relative;
+	min-width: 300px;
+	max-width: 300px;
+	width: 300px;
+	z-index: 1;
+
+}
+
+#addToQueueButton {	
+	position: relative;	
+	text-align: center;	
+	margin-top: 10px;		
 }
 
 .smallpy{
 	font-size: 25px;
 	color: green;
-	margin-right: -.2%;		
+	margin-right: -.2%;	
 }
 
 .bigpy{
 	font-size: 30px;
-	font-weight: 600;
+	font-weight: 600;	
 }
 
 a.smallpylink:link {text-decoration: none; color:green;}
@@ -45,4 +76,3 @@ a.bigpylink:link {text-decoration: none; color:black;}
 a.bigpylink:visited {text-decoration: none; color:black;}
 a.bigpylink:hover {text-decoration: none; color:black;}
 a.bigpylink:active {text-decoration: none; color:black;}
-

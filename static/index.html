@@ -2,28 +2,42 @@
 <html>
 <head>    
     <link rel="stylesheet" href="/static/css/base.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
     
-    <a href="/static/index.html" class='smallpylink'>
+    <a href="" class='smallpylink'>
     	<span class="smallpy">py</span>        
     </a>
 
-    <a href="/static/index.html" class='bigpylink'>
+    <a href="" class='bigpylink'>
    		<span class="bigpy">Downloader</span>
    	</a>   	
 </head>
+
 <body>
 
 	<div id = "container">
-		<div id = "downloadBox">
-			<form name="input" action="testFunction" method="post">
-
-				<input type="text" name="downloadURL>">
-				<input type = "submit" value = "Queue">
-
-			</form>
+		<div id = "navigation">
+			<span style="color:black">Home<br></span>
+			<a href="queue" class="smallpylink">Queue</a><br>
+			<a href="history" class="smallpylink">History</a><br>
+			<a href="config" class="smallpylink">Config<br>
 		</div>
-    
-	</div>
 
-</div></body>
+			<div id = "goodieBox">
+				<form name="input" action="testFunction" method="post">
+					
+					<div id="inputBox">											
+						<input type="text" size=35 name="downloadURL>">
+
+						<div id="addToQueueButton">
+							<input type = "submit" value = "Add to Queue">
+						</div>					
+					</div>
+
+				</form>								
+			</div>
+		
+	</div>
+</body>
+
 </html>

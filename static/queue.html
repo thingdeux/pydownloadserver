@@ -2,33 +2,47 @@
 <html>
 <head>    
     <link rel="stylesheet" href="/static/css/base.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
 
-    <a href="/static/index.html" class='smallpylink'>
+    <a href="index" class='smallpylink'>
     	<span class="smallpy">py</span>        
     </a>
 
-    <a href="/static/index.html" class='bigpylink'>
+    <a href="index" class='bigpylink'>
    		<span class="bigpy">Downloader</span>
    	</a>     	
 </head>
 
-<body><div id = "container">
-
-	<div id="queueTable">
-	    <table border = "1">	    	
-	    	<th id = "statusTableHeader">Filename</th>
-	    	<th id = "statusTableHeader">Status</th>
-	    	<th id = "statusTableHeader">Date Queued</th>
-		        %for filename, status, time in queued_files:
-		        <tr>
-		        	<td>${filename}</td>
-		        	<td>${status}%</td>
-		        	<td>${time}</td>
-		        </tr>
-		        %endfor
-	    	</tr>
-	    </table>
+<body>
+	<div id = "container">
+		<div id = "navigation">
+			<a href="index" class="smallpylink">Home</a><br>
+			<span style="color:black">Queue<br></span>
+			<a href="history" class="smallpylink">History</a><br>
+			<a href="config" class="smallpylink">Config<br>
+		</div>
 
 
+		<div id = "goodieBox">
+			<div id="queueTable">
+			    <table border = "1">	    	
+			    	<th id = "statusTableHeader">Filename</th>
+			    	<th id = "statusTableHeader">Status</th>
+			    	<th id = "statusTableHeader">Queued On</th>
+				        %for filename, status, time in queued_files:
+				        <tr>
+				        	<td>${filename}</td>
+				        	<td>${status}%</td>
+				        	<td>${time}</td>
+				        </tr>
+				        %endfor
+			    	</tr>
+			    </table>
+			</div>
+
+			
+
+		</div>
+	</div>
 
 <body></div>

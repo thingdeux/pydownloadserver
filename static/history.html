@@ -2,28 +2,41 @@
 <html>
 <head>    
     <link rel="stylesheet" href="/static/css/base.css" type="text/css">
-    <a href="/static/index.html" class='smallpylink'>
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
+
+    <a href="index" class='smallpylink'>
     	<span class="smallpy">py</span>        
     </a>
 
-    <a href="/static/index.html" class='bigpylink'>
+    <a href="index" class='bigpylink'>
    		<span class="bigpy">Downloader</span>
    	</a>  
 </head>
 
-<body><div id = "container">
+<body>
 
-	<div id="queueTable">
-	    <table border = "1">	    	
-	    	<th id = "statusTableHeader">Jobs waiting in inbox</th>
-		        %for url in inbox_urls:
-		        <tr>
-		        	<td>${url}</td>
-		        </tr>
-		        %endfor
-	    	</tr>
-	    </table>
+	<div id = "container">
+		<div id = "navigation">
+			<a href="index" class="smallpylink">Home</a><br>
+			<a href="queue" class="smallpylink">Queue</a><br>
+			<span style="color:black">History<br></span>
+			<a href="config" class="smallpylink">Config<br>
+		</div>
+		
+		<div id="goodieBox">
+			<div id="queueTable">
+			    <table border = "1">	    	
+			    	<th id = "statusTableHeader">Jobs waiting in inbox</th>
+				        %for url in inbox_urls:
+				        <tr>
+				        	<td>${url}</td>
+				        </tr>
+				        %endfor
+			    	</tr>
+			    </table>
+			</div>
+			
+	    </div>
+	</div>
 
-
-
-<body></div>
+<body>
