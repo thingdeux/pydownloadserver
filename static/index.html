@@ -10,7 +10,10 @@
 
     <a href="" class='bigpylink'>
    		<span class="bigpy">Downloader</span>
-   	</a>   	
+   	</a>
+
+   	<script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script>
+   	<script type="text/javascript" src="/js/basic_functionality.js"></script>  
 </head>
 
 <body>
@@ -23,18 +26,22 @@
 			<a href="config" class="smallpylink">Config<br></a>
 		
 			<div id = "goodieBox">
-				<form name="input" action="testFunction" method="post">
-					
+				
+				<form name="input">
 					<div id="inputBox">											
-						<input type="text" size=35 name="downloadURL>">
-
+						<input type="text" size=35 id = "addToQueueText">
+					
 						<div id="addToQueueButton">
-							<input type = "submit" value = "Add to Queue">
-						</div>					
+							<input type="button" value = "Add to Queue">
+							<div id = "QueueErrorBox"></div>
+							<p></p>
+						
+						</div>
+											
 					</div>
+				</form>
 
-				</form>								
-			</div>
+			</div>										
 		</div>
 	</div>
 </body>

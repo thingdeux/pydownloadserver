@@ -19,7 +19,14 @@ conf = { '/static': { 'tools.staticdir.on' : True,
                     },
          '/static/css': { 'tools.staticdir.on' : True,
                           'tools.staticdir.dir': os.path.join(current_folder, 'static/css')
-                        }                  
+                        },
+         '/js': { 'tools.staticdir.on' : True,
+                      'tools.staticdir.dir': os.path.join(current_folder, 'js')
+                    },
+         '/js/lib': { 'tools.staticdir.on' : True,
+                          'tools.staticdir.dir': os.path.join(current_folder, 'js/lib')
+                        },
+
         }
 
 
@@ -28,14 +35,24 @@ conf = { '/static': { 'tools.staticdir.on' : True,
 class webServer(object):            
 
     @cherrypy.expose
-    def index(self):       
+    def index(self, **arguments):       
         #Create the below template using index.html (and looking up in the static folder)
         mako_template = Template(filename='static/index.html')
         
         #Render the mako template and pass it the current_emails list variable
-        mako_template_render = mako_template.render()
+        self.mako_template_render = mako_template.render()                    
 
-        return mako_template_render
+        
+        def testFunction(self, url):
+            try:
+                print url
+                return self.mako_template_render          
+            except:
+                print ("Nope")    
+
+        return self.mako_template_render
+        testFunction.exposed = True
+
 
 
     @cherrypy.expose
