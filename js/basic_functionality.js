@@ -1,24 +1,29 @@
-function attemptQueue()
-{
+function attemptQueue() {
 	var returned_url = $("#addToQueueText").val();
 		
-	if (returned_url == "")
-	{
+	if (returned_url == "")	{
 		$("#QueueErrorBox").html("Empty URL")
 	}
-	else
-	{
+	else {
 		var concatenated_string = "Queueing: " + returned_url;
 		$("#QueueErrorBox").html(concatenated_string);
+		$("#addToQueueText").val("");
+		silentlySendDataWithPost("/addUrlToQueue", returned_url);		
 	}
 }
 
+function silentlySendDataWithPost(location, data)
+{
+	$.post( location, data );
+}
 
-//Wait for the document to load
-$(document).ready(function(){
+
+//Wait for the document to load --- write everything in here
+$(document).ready(function() {
 	
-	//Handler for queue button being clicked.
-	$("#addToQueueButton").click(function(){
+	// --- Index Page --- //
+	//Handler for queue button being clicked on index page.
+	$("#addToQueueButton").click(function() {
 		attemptQueue();			
 	});
 
@@ -31,6 +36,8 @@ $(document).ready(function(){
 				attemptQueue();
 			}
 	});
+
+	// --- Queue Page --- //
 
 });
 

@@ -1,6 +1,8 @@
 import cherrypy
 import emailCrawl
 import os
+import downloader
+import logger
 from mako.template import Template
 from mako.lookup import TemplateLookup
 #current_folder = os.path.dirname(__file__)
@@ -42,18 +44,18 @@ class webServer(object):
         #Render the mako template and pass it the current_emails list variable
         self.mako_template_render = mako_template.render()                    
 
-        
-        def testFunction(self, url):
-            try:
-                print url
-                return self.mako_template_render          
-            except:
-                print ("Nope")    
-
         return self.mako_template_render
-        testFunction.exposed = True
 
-
+    @cherrypy.expose
+    def addUrlToQueue(self, **kwargs):
+        try:            
+            for url in kwargs:
+                downloader.queueDownload(url)
+                logger.log("Adding: " + url + "to queue")
+            
+        except:
+            for url in kwargs:                
+                logger.log("Unable to queue: " + url)
 
     @cherrypy.expose
     def history(self):

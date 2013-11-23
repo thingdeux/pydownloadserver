@@ -7,7 +7,9 @@ __author__ = 'jason'
 #Feature request: Each download should run on its own subprocess
 
 
-import myDownload, time, threading
+import myDownload
+import time
+import threading
 
 def queueDownload(url):
 
@@ -28,10 +30,7 @@ def testFunction():
 	#thread2 = myDownload.myDownload(test_url2, test_filename2)
 	#starts my test threads
 	thread1.start()
-	#thread2.start()
-
-	#sleeps for a bit
-	#time.sleep(10)
+	#thread2.start()	
 
 	##tests the get process functions
 	#print thread1.filename

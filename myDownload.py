@@ -61,5 +61,5 @@ class myDownload(threading.Thread):
             percent = round(percent * 100, 2)
             return percent
         except:
-            return "error retrieving progress"
+            logger.log ("error retrieving progress")
 
