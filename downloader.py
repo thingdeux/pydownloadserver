@@ -10,6 +10,7 @@ __author__ = 'jason'
 import myDownload
 import time
 import threading
+import logger
 
 def queueDownload(url):
 

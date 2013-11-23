@@ -5,6 +5,7 @@ import imaplib
 import email
 import re
 import downloader
+import logger
 
 #E-mail auth information for the pydownloadserver@gmail.com inbox
 #E-mail account: pydownloadserver@gmail.com
@@ -22,7 +23,7 @@ def connectToMailbox():
         mailbox_object.login(email_username, email_password)
         return (mailbox_object)
     except:
-        print("unable to access email box")
+        logger.log("unable to access email box")
 
 
 #Attempt to acquire list of all e-mail in the inbox.

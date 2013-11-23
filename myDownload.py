@@ -7,7 +7,8 @@ __author__ = 'jason'
 
 
 import urllib2
-import threading 
+import threading
+import logger
 
 
 class myDownload(threading.Thread):
