@@ -101,7 +101,7 @@ def startWebServer():
     if database.verifyDatabaseExistence():
 
         try:
-            if database.verifyDatabaseExistence():                
+            if database.verifyDatabaseExistence():                    
                 cherrypy.quickstart(webServer(), config=conf)
             
         except Exception, err:

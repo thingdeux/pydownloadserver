@@ -8,22 +8,27 @@
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
 
+    <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script>
+   	<script type="text/javascript" src="/js/table_functionality.js"></script>  
+
     <a href="index" class='smallpylink'><span class="smallpy">py</span></a>
-    <a href="index" class='bigpylink'><span class="bigpy">Downloader</span></a>     	
+    <a href="index" class='bigpylink'><span class="bigpy">Downloader</span></a>
+
 </head>
 
 <body>
 	<div id = "container">
 		<div id = "navigation">
-			<a href="index" class="smallpylink">Home<br></a>
-			<span style="color:black">Queue</a></span>
-			<a href="history" class="smallpylink">History<br></a>
-			<a href="config" class="smallpylink">Config<br></a>			
-
+			<div id = "navbar">
+				<a href="index" class="smallpylink">Home<br></a>
+				<span style="color:black">Queue</a></span>
+				<a href="history" class="smallpylink">History<br></a>
+				<a href="config" class="smallpylink">Config<br></a>			
+			</div>
 
 			<div id = "goodieBox">
 				<div id="queueTable">
-				    <table border = "1" width="10">	    	
+				    <table border = "1">				    	
 				    	<th id = "statusTableHeader">URL</th>
 				    	<th id = "statusTableHeader">Status</th>
 				    	<th id = "statusTableHeader">Time Left</th>
@@ -31,7 +36,7 @@
 				    	<th id = "statusTableHeader">Source</th>
 					       %for row_id, url, status, time_left, time_queued, source in active_queue_data:
 					        <tr>
-					        	<td>${url}</td>
+					        	<td><div id = "table_url">${url}</div></td>
 					        	<td>${status}</td>
 					        	<td>${time_left}</td>
 					        	<td>${time_queued}</td>

@@ -94,9 +94,9 @@ def queueAllEmailInbox():
         for url in current_inbox:
             if len(url) > 1:  #If the current URL is actually a list of URLS then process each URL
                 for sub_url in url:
-                    downloader.queueDownload(sub_url)
+                    downloader.queueDownload(sub_url, "email")
             else: #Only one download URL in the e-mail, queue it up
-                downloader.queueDownload(url[0])
+                downloader.queueDownload(url[0], "email")
     except:
         return (False)
 

@@ -6,15 +6,21 @@ __author__ = 'jason'
 
 #Feature request: Each download should run on its own subprocess
 
-
 import myDownload
 import time
 import threading
 import logger
+import database
 
-def queueDownload(url):
-
-    downloadFileName = url.split('/')[-1] #Gather the file name from the URL    
+def queueDownload(url, source="web"):
+	try:
+		#Gather the file name from the URL		
+		logger.log("downloader Received Queue req: " + url + " | " + source)
+		downloadFileName = url.split('/')[-1]
+		database.insertJob(url, source)
+	except Exception, err:
+		for error in err:
+			logger.log("Unable to queue url - " + error)
 
 
 def testFunction():
@@ -40,7 +46,8 @@ def testFunction():
 	#thread2.getProgress()
 
 
-class aThread(threading.Thread):
+
+class aTestThread(threading.Thread):
 	def __init__(self, threadID, name, counter):
 		threading.Thread.__init__(self) #Overriding default init
 		self.threadID = threadID
@@ -51,18 +58,12 @@ class aThread(threading.Thread):
 		for i in range(100):
 			print (str(i)),
 		print("")
-
-
-
 def testThreading():
 	thread1 = aThread(1, "Uno", 1)
 	thread2 = aThread(2, "Uno", 2)
 
 	thread1.start()
 	thread2.start()
-
-
-
 
 
 

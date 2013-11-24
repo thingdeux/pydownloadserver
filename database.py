@@ -54,15 +54,14 @@ def debugCreateTestData():
 
 		#Buid data string to insert
 		jobsData = [
-			(None, "http://i.imgur.com/NRfBaS6.jpg", "Queued", 0, logger.getTime(), source),
-			(None, "http://i.imgur.com/NRfBaS6.jpg", "Queued", 0, logger.getTime(), source),
-		]
-
-
-	except: Exception, err:
+			(None, 'http://i.imgur.com/NRfBaS6.jpg', "Queued", 0, logger.getTime(), source),
+			(None, 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20Setup.exe', "Queued", 0, logger.getTime(), source),
+		]			
+	except Exception, err:
 		for error in err:
-			logger.log(error)
+			logger.log("Unable to create test data - " + error)
 			db.close()
+
 def getJobs(resultRequested):
 	try:
 		db_connection = connectToDB()
@@ -88,12 +87,13 @@ def getJobs(resultRequested):
 			logger.log("Unable to query DB - " + error)
 		return(False)	
 
-def insertJob(url, source):
+def insertJob(url, source):	
+	logger.log("database received insert request " + url + " | " + source)
 	try:
 		db_connection = connectToDB()
 		db = db_connection.cursor()
-		#Build job list to be inserted into DB
-		job = [	(None, url, "Queued", 0, logger.getTime(), source)  ]
+		#Build job list to be inserted into DB		
+		job = [	(None, url, "Queued", 0, logger.getTime(), source)  ]		
 		#iterate over list and create insert command for DB
 		db.executemany('INSERT INTO jobs VALUES (?,?,?,?,?,?)', job)			
 

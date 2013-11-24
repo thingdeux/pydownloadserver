@@ -17,8 +17,10 @@
 
 **myDownload.py** (class definition)
 
-**database.py**  functions for interacting with the sqllite3 DB  
+**downloader.py** (handler for download events)
+	-queueDownload(url, source = "web") - function to use when requesting a job queue for a url
 
+**database.py**  functions for directly interacting with the sqllite3 DB
 
 	-verifyDatabaseExistence() - Used on server startup to make sure DB exists.  
 	-createFreshTables() - called by server to create a new,empty table with schema  
