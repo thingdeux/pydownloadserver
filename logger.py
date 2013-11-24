@@ -8,3 +8,7 @@ def log(error):
 
 	#This will change for debugging it's print	
 	print(the_error)
+
+def getTime():
+	current_time = time.asctime(time.localtime(time.time()))
+	return (current_time)

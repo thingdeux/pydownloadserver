@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
+<title>
+	pyDownloader
+</title>
 <head>    
     <link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
-
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
+    
     <a href="index" class='smallpylink'><span class="smallpy">py</span></a>
     <a href="index" class='bigpylink'><span class="bigpy">Downloader</span></a>
 </head>
@@ -20,14 +24,22 @@
 
 			<div id="goodieBox">
 				<div id="queueTable">
-				    <table border = "1">	    	
-				    	<th id = "statusTableHeader">Jobs waiting in inbox</th>
-					        %for url in inbox_urls:
+				    <table border = "1" width="10">	    	
+				    	<th id = "statusTableHeader">URL</th>
+				    	<th id = "statusTableHeader">Status</th>
+				    	<th id = "statusTableHeader">Time Left</th>
+				    	<th id = "statusTableHeader">Added On</th>
+				    	<th id = "statusTableHeader">Source</th>
+					       %for row_id, url, status, time_left, time_queued, source in historical_queue_data:
 					        <tr>
 					        	<td>${url}</td>
+					        	<td>${status}</td>
+					        	<td>${time_left}</td>
+					        	<td>${time_queued}</td>
+					        	<td>${source}</td>
 					        </tr>
-					        %endfor
-				    	</tr>
+					        %endfor					       
+ 				    	
 				    </table>
 				</div>
 			</div>

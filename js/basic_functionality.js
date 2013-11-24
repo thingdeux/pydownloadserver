@@ -1,12 +1,18 @@
 function attemptQueue() {
 	var returned_url = $("#addToQueueText").val();
-		
-	if (returned_url == "")	{
-		$("#QueueErrorBox").html("Empty URL")
+	
+
+	if (returned_url == "")	{	
+		//Make sure the queue box actually has text in it
+		$("#QueueErrorBox").html('Empty URL').hide().fadeIn();
+		setTimeout(function() { $("#QueueErrorBox").fadeOut(); }, 2500);
 	}
 	else {
-		var concatenated_string = "Queueing: " + returned_url;
-		$("#QueueErrorBox").html(concatenated_string);
+		//If so send whatever text it happens to be to the queue handler
+		var concatenated_string = "Sent:  " + returned_url + " to queue";
+		$("#QueueErrorBox").html(concatenated_string).hide().fadeIn();
+		setTimeout(function() { $("#QueueErrorBox").fadeOut(); }, 2500);
+
 		$("#addToQueueText").val("");
 		silentlySendDataWithPost("/addUrlToQueue", returned_url);		
 	}

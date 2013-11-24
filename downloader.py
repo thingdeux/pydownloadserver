@@ -14,7 +14,7 @@ import logger
 
 def queueDownload(url):
 
-    downloadFileName = url.split('/')[-1] #Gather the file name from the URL
+    downloadFileName = url.split('/')[-1] #Gather the file name from the URL    
 
 
 def testFunction():

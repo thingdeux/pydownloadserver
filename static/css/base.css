@@ -36,11 +36,10 @@ body {
 #statusTableHeader{	
 	font-size: large;
 	background-color: green;	
-	font-weight: bold;
-	min-width: 120px;	
-	max-width: 400px;
+	font-weight: bold;	
+	min-width: 140px;	
+	max-width: 300px;
 	color:  #E3F8E3;	
-	z-index: 2;
 }
 
 #inputBox {			
@@ -77,6 +76,14 @@ body {
 	min-width: 200px;
 	max-width: 200px;
 }
+#QueueErrorBox{
+	position: relative;
+	color:black;
+	font-weight: bold;
+	top: 6px;
+	font-size: 10px;
+}
+
 
 .smallpy{
 	font-size: 25px;
