@@ -21,16 +21,14 @@
 
 
 	-verifyDatabaseExistence() - Used on server startup to make sure DB exists.  
-
 	-createFreshTables() - called by server to create a new,empty table with schema  
-
 	-getJobs(requestedJob) -returns python list of jobs in the queue - can be passed the following params:  
 
 			1.	all  
-			2.	active  
-			3.	historical  
-			4.	failed  
-			5.	succesful  
+			2.	active  (returns all queued/downloading)
+			3.	historical  (returns all succesful/failed)
+			4.	failed  (returns all failed)
+			5.	succesful  (returns all succesful)
 
 	-insertJob(url, source) -Insert a job into the download queue - (ex: of source can be web or email)  
 

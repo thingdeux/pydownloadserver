@@ -36,6 +36,33 @@ def createFreshTables():
 	db_connection.commit()
 	db_connection.close()
 
+def connectToDB():
+	try:
+		#If DB doesn't exist create its tables and keys
+		db_connection = sqlite3.connect(db_path)
+		db = db_connection.cursor()				
+		return (db_connection)
+	except Exception, err:
+		for error in err:
+			logger.log("Unable to connect to DB - " + error)
+			return (False)
+
+def debugCreateTestData():
+	try:
+		db_connection = connectToDB()
+		db = db_connection.cursor()
+
+		#Buid data string to insert
+		jobsData = [
+			(None, "http://i.imgur.com/NRfBaS6.jpg", "Queued", 0, logger.getTime(), source),
+			(None, "http://i.imgur.com/NRfBaS6.jpg", "Queued", 0, logger.getTime(), source),
+		]
+
+
+	except: Exception, err:
+		for error in err:
+			logger.log(error)
+			db.close()
 def getJobs(resultRequested):
 	try:
 		db_connection = connectToDB()
@@ -83,13 +110,7 @@ def insertJob(url, source):
 			logger.log("Unable to insert record - " + error)
 
 
-def connectToDB():
-	try:
-		#If DB doesn't exist create its tables and keys
-		db_connection = sqlite3.connect(db_path)
-		db = db_connection.cursor()				
-		return (db_connection)
-	except Exception, err:
-		for error in err:
-			logger.log("Unable to connect to DB - " + error)
-			return (False)
+
+
+
+
