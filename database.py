@@ -48,19 +48,37 @@ def connectToDB():
 			return (False)
 
 def debugCreateTestData():
-	try:
-		db_connection = connectToDB()
-		db = db_connection.cursor()
+	
+	db_connection = connectToDB()
+	db = db_connection.cursor()
 
-		#Buid data string to insert
-		jobsData = [
-			(None, 'http://i.imgur.com/NRfBaS6.jpg', "Queued", 0, logger.getTime(), source),
-			(None, 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20Setup.exe', "Queued", 0, logger.getTime(), source),
-		]			
+	#Buid data string to insert
+	jobsData = [
+		(None, 'http://i.imgur.com/NRfBaS6.jpg', "Queued", 0, logger.getTime(), "email"),
+		(None, 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20Setup.exe', "Queued", 0, logger.getTime(), "email"),
+		(None, 'http://xxx.com/buttblasters11.avi', "Queued", 0, logger.getTime(), "email"),
+		(None, 'http://xxx.com/buttblasters21.avi', "Failed", 0, logger.getTime(), "email"),
+		(None, 'http://xxx.com/buttblasters1.avi', "Succesful", 0, logger.getTime(), "web"),
+		(None, 'http://xxx.com/buttblasters2.avi', "Succesful", 0, logger.getTime(), "web"),
+		(None, 'http://thisismeaddingaURL.com', "Downloading", 0, logger.getTime(), "email"),
+		(None, 'http://i.imgur.com/lOOw9rq.gif', "Downloading", 0, logger.getTime(), "web"),
+		(None, 'http://google.com/cockmunchers3.avi', "Queued", 0, logger.getTime(), "web"),
+		(None, 'http://xxx.com/buttblasters16.avi', "Succesful", 0, logger.getTime(), "web"),
+		(None, 'http://xxx.com/buttblasters16.avi', "Failed", 0, logger.getTime(), "email"),			
+	]		
+
+	db.executemany('INSERT INTO jobs VALUES (?,?,?,?,?,?)', jobsData)
+
+	try:
+		db_connection.commit()
+		db_connection.close()
+		logger.log(logger.getTime() + " Inserted test data into db")
 	except Exception, err:
 		for error in err:
-			logger.log("Unable to create test data - " + error)
+			logger.log("Unable to insert test data" + error)
 			db.close()
+
+		
 
 def getJobs(resultRequested):
 	try:

@@ -27,7 +27,8 @@ body {
 	left: 45px;
 }
 #queueTable{
-	position: relative;				
+	position: relative;
+	text-align: center;			
 	font-size: 9px;			
 	width: 100px;
 	max-width: 50px;
@@ -36,8 +37,8 @@ body {
 }
 
 #statusTableHeader{	
-	font-size: 10px;			
-	font-weight: bold;
+	font-size: 14px;			
+	font-weight: bold;	
 	background-color: green;	
 	color:  #E3F8E3;	
 }

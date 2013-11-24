@@ -8,6 +8,7 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 
 VERSION = "0.3"
+CURRENT_STATE = "debug"
 
 # bind to all IPv4 interfaces and set port
 current_folder = os.path.dirname(os.path.abspath(__file__))
@@ -111,6 +112,8 @@ def startWebServer():
         try:
             #Database doesn't exist, create it then recursively try again
             database.createFreshTables()
+            if CURRENT_STATE is "debug":
+                database.debugCreateTestData()
             startWebServer()
         except Exception, err:
             for error in err:
