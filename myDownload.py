@@ -12,11 +12,12 @@ import logger
 
 
 class myDownload(threading.Thread):
-    def __init__(self, url, filename):
+    def __init__(self, url, pathToSave, filename, threadID):
         threading.Thread.__init__(self)
+        self.threadID = threadID
         self.url = url
         self.filename = filename
-        self.location_to_save = "C:\Development\Python\Junk\shitfile.exe" #Change or make passable
+        self.location_to_save = pathToSave + filename #Change or make passable
         self.progress = None
         self.response = None
 
@@ -38,16 +39,28 @@ class myDownload(threading.Thread):
             #self.__saveToFile()
 
         #The following breaks down any downloading into memory manageable 32MB chunks. 
-        self.response = urllib2.urlopen(self.url)       
-        downloadable_chunk_size = 16*32768
-        
-        with open(self.location_to_save, 'wb') as file_object:
-            while True:     
-                chunk_size = self.response.read(CHUNK)     
-                if not downloadable_chunk_size: break                
-                file_object.write(downloadable_chunk_size)
+        try:
+            self.response = urllib2.urlopen(self.url)
+        except:
+            #need error handling to let us know wtf happened
+            exit() #lets go ahead and kill this thread
 
+        if self.__getResponsecode() == 200:
 
+            downloadable_chunk_size = 16*32768
+
+            #following locks the thread so no other threads can fire
+            #threadLock.acquire()
+
+            #open the file and save
+            with open(self.location_to_save, 'wb') as file_object:
+                while True:
+                    chunk = self.response.read(downloadable_chunk_size)
+                    if not downloadable_chunk_size: break
+                    file_object.write(chunk)
+
+        #following releases the lock so we can fire the next download
+        #threadLock.release()
 
 
     def getProgress(self):
