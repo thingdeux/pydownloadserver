@@ -110,7 +110,7 @@ def manageQueues():
 
 
 
-manageQueues()
+#manageQueues()
 
 #testFunction()
 #testThreading()

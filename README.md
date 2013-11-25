@@ -24,6 +24,9 @@
 
 	-verifyDatabaseExistence() - Used on server startup to make sure DB exists.  
 	-createFreshTables() - called by server to create a new,empty table with schema  
+	-getConfig(parameter) - If called with no parameter, returns all config items, otherwise specify a string for name and a config item list will be returned.
+			List Contents: id | config_type (ex: general, server, e-mail) | name (ex: email_password, server_host) | value | html_tag | html_display_name
+			Example use: getConfig('email_username')  -or- getConfig()
 	-getJobs(requestedJob) -returns python list of jobs in the queue - can be passed the following params:  
 
 			1.	all  
