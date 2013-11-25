@@ -3,7 +3,8 @@ body {
 }
 
 #container{	
-	margin-top: 2%;	
+	margin-top: 2%;
+	font-family: "Tahoma";
 }
 
 #navigation {			
@@ -23,22 +24,27 @@ body {
 	margin-left: 60%;
 	padding-left: 20%;
 	white-space: nowrap;
-	top: -100px;	
+	top: -90px;	
 	left: 45px;
 }
-#queueTable{
+#queueTable{	
 	position: relative;
 	text-align: center;			
-	font-size: 9px;			
+	font-size: 13px;			
 	width: 100px;
 	max-width: 50px;
 	color: black;
 	z-index: 2;			
 }
+#table_url {
+	min-width: 240px;
+}
 
-#statusTableHeader{	
+#statusTableHeader{		
 	font-size: 14px;			
-	font-weight: bold;	
+	font-weight: bold;
+	min-width: 140px;
+	max-width: 240px;
 	background-color: green;	
 	color:  #E3F8E3;	
 }
@@ -50,7 +56,7 @@ body {
 	max-width: 300px;
 	width: 300px;
 	z-index: 1;
-	top: 40px;
+	top: 30px;
 }
 
 #addToQueueButton {	
@@ -88,12 +94,14 @@ body {
 .smallpy{
 	font-size: 25px;
 	color: green;
-	margin-right: -.2%;	
+	margin-right: -.2%;		
+	font-family: "Tahoma";
 }
 
 .bigpy{
 	font-size: 30px;
-	font-weight: 600;	
+	font-weight: 400;
+	font-family: "Tahoma";
 }
 
 a.smallpylink:link {text-decoration: none; color:green;}
