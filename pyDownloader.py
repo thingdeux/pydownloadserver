@@ -4,6 +4,7 @@ import os
 import downloader
 import logger
 import database
+import threading
 from cherrypy.process.plugins import Monitor
 from cherrypy.process.plugins import BackgroundTask
 from mako.template import Template
@@ -103,8 +104,14 @@ class webServer(object):
 
 
 def runCronJobs():
-    downloader.manageQueues()
-    logger.log("Running")
+    if t1.isAlive():
+        logger.log("Running")
+    else:
+        t1.start()
+        logger.log("Started QueueManager")
+    #downloader.manageQueues()
+    #logger.log("Running")
+
 
 def startWebServer():
     if database.verifyDatabaseExistence():
@@ -129,10 +136,8 @@ def startWebServer():
         except Exception, err:
             for error in err:
                 logger.log("Unable to create DB: " + error)         
-            
-    
-<<<<<<< HEAD
-downloader.manageQueues()
-=======
->>>>>>> 1681cf8be4f23e7e5d92e6478b462b27d863ebf3
+
+
+t1 = threading.Thread(target=downloader.manageQueues)
+runCronJobs() #give queue manager an initial kick start through the cron
 startWebServer()
