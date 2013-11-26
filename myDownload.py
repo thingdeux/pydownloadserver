@@ -9,7 +9,7 @@ __author__ = 'jason'
 import urllib2
 import threading
 import logger
-
+import database
 
 class myDownload(threading.Thread):
     def __init__(self, url, pathToSave, filename, threadID, sema):
@@ -21,6 +21,11 @@ class myDownload(threading.Thread):
         self.location_to_save = pathToSave + filename
         self.progress = None
         self.response = None
+
+    def __releaseAndExit(self):
+        self.sema.release()
+        exit()
+
 
     def __getResponsecode(self):
         code = self.response.code
@@ -34,12 +39,13 @@ class myDownload(threading.Thread):
         #Aquire a lock based on number of allowed concurrent processes
         self.sema.acquire()
 
+        #Try to open the file
         try:
             self.response = urllib2.urlopen(self.url)
         except:
             #need error handling to let us know wtf happened
-            self.sema.release() #release my lock to let the next proc fire
-            exit() #lets go ahead and kill this thread
+            database.updateJobStatus(int(self.threadID), "failed") #Update status to failed
+            self.__releaseAndExit()
 
 
         if self.__getResponsecode() == 200:
@@ -47,15 +53,20 @@ class myDownload(threading.Thread):
             downloadable_chunk_size = 16*32768
 
             #open the file and save
+            database.updateJobStatus(int(self.threadID), "downloading")
             with open(self.location_to_save, 'wb') as file_object:
                 while True:
                     chunk = self.response.read(downloadable_chunk_size)
                     if not chunk: break
                     file_object.write(chunk)
+            database.updateJobStatus(int(self.threadID), "successful") #Update status to failed
+            #following releases the lock so we can fire the next download
+            self.__releaseAndExit()
 
-        #following releases the lock so we can fire the next download
-            self.sema.release()
-            exit()
+        else:
+            database.updateJobStatus(int(self.threadID), "failed") #Update status to failed
+            #following releases the lock so we can fire the next download
+            self.__releaseAndExit()
 
 
 
