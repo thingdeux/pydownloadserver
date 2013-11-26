@@ -11,6 +11,7 @@ import time
 import threading
 import logger
 import database
+import os
 
 def queueDownload(url, source="web"):
 	try:
@@ -74,11 +75,21 @@ def makeDownloadFileName(url):
 def manageQueues():
 
 
-    #max_number_of_downloads = 2
+    max_number_of_downloads = 2
+
+
+    download_semaphore=threading.BoundedSemaphore(value=max_number_of_downloads)
+
+
     #threadLock = threading.Lock()
 
     ThreadStatusDebug = True
-    defaultPath = '/home/jason/tmp/'
+
+    defaultPath = os.path.dirname(os.path.abspath(__file__))
+    defaultPath = defaultPath + '/tmp/'
+    if not os.path.isdir(defaultPath):
+	    os.mkdir(defaultPath)
+
 
     download_threads= []
     files_in_active_status = database.getJobs("active")
@@ -94,19 +105,28 @@ def manageQueues():
             file_to_queue = [uniqueID, url]
             if not any(uniqueID in downloads for downloads in files_in_queued_status):
                 files_in_queued_status.append(file_to_queue) #Keeping track of what I've queued
-                downloadContainer = myDownload.myDownload(url,defaultPath, defaultFileName,uniqueID)
-                downloadContainer.start() #start the thread
+                downloadContainer = myDownload.myDownload(url,defaultPath, defaultFileName,uniqueID, download_semaphore)
+                #downloadContainer.start() #start the thread
                 download_threads.append(downloadContainer) #put it in a list to check on later
+
 
 
     #not sure if this is actually working thanks to how fast its downloading.
     #I'll need a beefy file to download to test this portion.
     if ThreadStatusDebug == True:
         for t in download_threads:
-            if t.isAlive == True:
-                print str(t.threadID) + "is alive"
-            else:
-                print str(t.threadID) + "Terminated"
+            t.start()
+
+
+
+
+
+            #print "sent start command"
+            #if t.isAlive == True:
+            #    print str(t.threadID) + "is alive"
+            #else:
+            #    print str(t.threadID) + "Terminated"
+
 
 
 

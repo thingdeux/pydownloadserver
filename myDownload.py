@@ -12,12 +12,13 @@ import logger
 
 
 class myDownload(threading.Thread):
-    def __init__(self, url, pathToSave, filename, threadID):
+    def __init__(self, url, pathToSave, filename, threadID, sema):
         threading.Thread.__init__(self)
+        self.sema = sema
         self.threadID = threadID
         self.url = url
         self.filename = filename
-        self.location_to_save = pathToSave + filename #Change or make passable
+        self.location_to_save = pathToSave + filename
         self.progress = None
         self.response = None
 
@@ -30,37 +31,32 @@ class myDownload(threading.Thread):
         return False
 
     def run(self):
-        #print self.filename + " is running"
-        #self.response = urllib2.urlopen(self.url)  #You did a blind read here
-        #if not self.__getResponsecode() == 200:
-            #self.progress = self.__getResponsecode()
-        #else:
-            #print self.__getResponsecode()
-            #self.__saveToFile()
+        #Aquire a lock based on number of allowed concurrent processes
+        self.sema.acquire()
 
-        #The following breaks down any downloading into memory manageable 32MB chunks. 
         try:
             self.response = urllib2.urlopen(self.url)
         except:
             #need error handling to let us know wtf happened
+            self.sema.release() #release my lock to let the next proc fire
             exit() #lets go ahead and kill this thread
 
+
         if self.__getResponsecode() == 200:
-
+            #The following breaks down any downloading into memory manageable 32MB chunks.
             downloadable_chunk_size = 16*32768
-
-            #following locks the thread so no other threads can fire
-            #threadLock.acquire()
 
             #open the file and save
             with open(self.location_to_save, 'wb') as file_object:
                 while True:
                     chunk = self.response.read(downloadable_chunk_size)
-                    if not downloadable_chunk_size: break
+                    if not chunk: break
                     file_object.write(chunk)
 
         #following releases the lock so we can fire the next download
-        #threadLock.release()
+            self.sema.release()
+            exit()
+
 
 
     def getProgress(self):
