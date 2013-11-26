@@ -4,6 +4,8 @@ import os
 import downloader
 import logger
 import database
+from cherrypy.process.plugins import Monitor
+from cherrypy.process.plugins import BackgroundTask
 from mako.template import Template
 from mako.lookup import TemplateLookup
 
@@ -13,9 +15,8 @@ CURRENT_STATE = "debug"
 # bind to all IPv4 interfaces and set port
 current_folder = os.path.dirname(os.path.abspath(__file__))
 
-
 cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
-                         'server.socket_port': 12334,
+                         'server.socket_port': 12334,                        
                          })
 
 conf = {         
@@ -98,14 +99,21 @@ class webServer(object):
         #Render the mako template
         mako_template_render = mako_template.render(config_data = config_parameters)
 
-        return mako_template_render   
+        return mako_template_render    
 
+
+def runCronJobs():
+    downloader.manageQueues()
+    logger.log("Running")
 
 def startWebServer():
     if database.verifyDatabaseExistence():
 
         try:
-            if database.verifyDatabaseExistence():                    
+            if database.verifyDatabaseExistence():
+                #Register cherrypy monitor - runs every 30 seconds
+                EventScheduler = Monitor(cherrypy.engine, runCronJobs, 30, 'EventScheduler'  )
+                EventScheduler.start()
                 cherrypy.quickstart(webServer(), config=conf)
             
         except Exception, err:
@@ -123,5 +131,4 @@ def startWebServer():
                 logger.log("Unable to create DB: " + error)            
             
     
-
-startWebServer()
+#startWebServer()

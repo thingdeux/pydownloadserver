@@ -169,7 +169,25 @@ def getConfig(config_name='all'):
 				db_connection.close()
 
 #def deleteJobByID(id):
-
 #def deleteJobByURL(url):
-#def modifyConfiguration:
 
+def changeJobStatusByID(job_id, new_status):
+
+	if new_status in ('Succesful', 'Failed', 'Queued', 'Downloading'):
+
+		try:
+			db_connection = connectToDB()
+			db = db_connection.cursor()		
+			db.execute('UPDATE jobs SET status =:status WHERE id=:id', {"status":new_status, "id":job_id} )
+
+			db_connection.commit()		
+			db_connection.close()
+			
+		except Exception, err:
+			for error in err:
+				logger.log("Unable to modify job - " + error)
+				db_connection.close()
+	else:
+		logger.log("Attempting to update job with an invalid status")
+
+#def modifyConfiguration:
