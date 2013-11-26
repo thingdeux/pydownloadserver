@@ -101,7 +101,7 @@ def getJobs(resultRequested):
 			db.execute('''SELECT * from jobs WHERE status ="Failed" ''')
 		elif resultRequested is "succesful":
 			db.execute('''SELECT * from jobs WHERE status = "Succesful" ''')
-        elif resultRequested is "queued":
+		elif resultRequested is "queued":
 			db.execute('''SELECT * from jobs WHERE status = "Queued" ''')
 
 		data = db.fetchall()		
@@ -172,3 +172,4 @@ def getConfig(config_name='all'):
 
 #def deleteJobByURL(url):
 #def modifyConfiguration:
+
