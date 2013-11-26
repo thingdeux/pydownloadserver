@@ -78,9 +78,9 @@ class webServer(object):
     def queue(self):       
         #Create the below template using queue.html (and looking up in the static folder)
         mako_template = Template(filename='static/queue.html')
-                
+        
+        #DB query to get active jobs
         active_queue_results = database.getJobs("active")
-
 
         #Render the mako template and pass it the current_emails list variable
         mako_template_render = mako_template.render(active_queue_data = active_queue_results)
@@ -92,8 +92,11 @@ class webServer(object):
         #Create the below template using config.html (and looking up in the static folder)
         mako_template = Template(filename='static/config.html')
         
+        #DB query to get current parameters
+        config_parameters = database.getConfig()
+
         #Render the mako template
-        mako_template_render = mako_template.render()
+        mako_template_render = mako_template.render(config_data = config_parameters)
 
         return mako_template_render   
 

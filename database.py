@@ -18,7 +18,6 @@ def verifyDatabaseExistence():
 	else:
 		return(False)
 	
-
 def createFreshTables():
 	#If DB doesn't exist create its tables and keys
 	db_connection = sqlite3.connect(db_path)
@@ -28,12 +27,11 @@ def createFreshTables():
 			(id INTEGER PRIMARY KEY, url TEXT, status TEXT, time_left INTEGER,
 				time_queued INTEGER, source TEXT)''')
 	db.execute('''CREATE TABLE config 
-			(id INTEGER PRIMARY KEY, email_username TEXT, email_password TEXT, download_location INTEGER,
-				pause_queue INTEGER)''')
+			(id INTEGER PRIMARY KEY, config_type TEXT, name TEXT, value TEXT, html_tag TEXT, html_display_name)''')
 	db.execute(''' CREATE INDEX sourceIndex ON jobs(source ASC) ''')
 	db.execute(''' CREATE INDEX statusIndex ON jobs(status ASC) ''')
 
-	db_connection.commit()
+	db_connection.commit()	
 	db_connection.close()
 
 def connectToDB():
@@ -67,7 +65,17 @@ def debugCreateTestData():
 		(None, 'http://xxx.com/buttblasters16.avi', "Failed", 0, logger.getTime(), "email"),			
 	]		
 
+	configData = [
+		(None,'E-Mail', 'email_username', 'pydownloadserver', 'text', 'GMail Username:'),
+		(None,'E-Mail', 'email_password', 'Kaiser123', 'text', 'Gmail Password:'),
+		(None,'General', 'download_path', current_path, 'text', "Download Location:"),
+		(None,'Server', 'server_host', '0.0.0.0', 'text', "Host:"),
+		(None,'Server', 'server_port', '12334', 'text', "Port")
+		
+	]
+
 	db.executemany('INSERT INTO jobs VALUES (?,?,?,?,?,?)', jobsData)
+	db.executemany('INSERT INTO config VALUES (?,?,?,?,?,?)', configData)
 
 	try:
 		db_connection.commit()
@@ -76,10 +84,8 @@ def debugCreateTestData():
 	except Exception, err:
 		for error in err:
 			logger.log("Unable to insert test data" + error)
-			db.close()
-
+			db_connection.close()
 		
-
 def getJobs(resultRequested):
 	try:
 		db_connection = connectToDB()
@@ -103,10 +109,10 @@ def getJobs(resultRequested):
 	except Exception, err:
 		for error in err:
 			logger.log("Unable to query DB - " + error)
+			db_connection.close()
 		return(False)	
 
-def insertJob(url, source):	
-	logger.log("database received insert request " + url + " | " + source)
+def insertJob(url, source):		
 	try:
 		db_connection = connectToDB()
 		db = db_connection.cursor()
@@ -121,14 +127,46 @@ def insertJob(url, source):
 		except Exception, err:
 			for error in err:
 				logger.log(error)
-				db.close()		
+				db_connection.close()		
 	except Exception, err:
 		for error in err:
 			db_connection.close()
 			logger.log("Unable to insert record - " + error)
 
+#Pull config info from the DB
+def getConfig(config_name='all'):
 
+	if config_name == 'all' or config_name == '':
+		try:
+			db_connection = connectToDB()
+			db = db_connection.cursor()		
+			db.execute('''SELECT * from config''')
+			config_data = db.fetchall()
+			db_connection.close()
 
+			return (config_data)
 
+		except Exception, err:
+				for error in err:
+					logger.log("Unable to get config info - " + error)
+					db_connection.close()
+				return (False)				
+	else:
+		try:
+			db_connection = connectToDB()
+			db = db_connection.cursor()			
+			db.execute('SELECT * FROM config WHERE name=?', (config_name,) )
 
+			config_item = db.fetchall()			
+			db_connection.close()
 
+			return ( config_item )
+		except Exception, err:
+			for error in err:
+				logger.log("Unable to get config info - " + error)
+				db_connection.close()
+
+#def deleteJobByID(id):
+
+#def deleteJobByURL(url):
+#def modifyConfiguration:
