@@ -138,6 +138,13 @@ def insertJob(url, source):
 #Pull config info from the DB
 def getConfig(config_name='all'):
 
+	def tupleToList(passed_tuple):
+		built_list = []
+		for item in passed_tuple:
+			built_list.append(item)
+
+		return (built_list)
+
 	if config_name == 'all' or config_name == '':
 		try:
 			db_connection = connectToDB()
@@ -152,7 +159,7 @@ def getConfig(config_name='all'):
 				for error in err:
 					logger.log("Unable to get config info - " + error)
 					db_connection.close()
-				return (False)				
+				return (False)	
 	else:
 		try:
 			db_connection = connectToDB()

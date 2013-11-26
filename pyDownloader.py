@@ -128,7 +128,7 @@ def startWebServer():
             startWebServer()
         except Exception, err:
             for error in err:
-                logger.log("Unable to create DB: " + error)            
+                logger.log("Unable to create DB: " + error)         
             
     
 startWebServer()
