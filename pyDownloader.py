@@ -123,5 +123,5 @@ def startWebServer():
                 logger.log("Unable to create DB: " + error)            
             
     
-
+downloader.manageQueues()
 startWebServer()
