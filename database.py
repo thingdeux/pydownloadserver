@@ -67,7 +67,7 @@ def debugCreateTestData():
 
 	configData = [
 		(None,'E-Mail', 'email_username', 'pydownloadserver', 'text', 'GMail Username:'),
-		(None,'E-Mail', 'email_password', 'Kaiser123', 'text', 'Gmail Password:'),
+		(None,'E-Mail', 'email_password', 'Kaiser123', 'password', 'Gmail Password:'),
 		(None,'General', 'download_path', current_path, 'text', "Download Location:"),
 		(None,'Server', 'server_host', '0.0.0.0', 'text', "Host:"),
 		(None,'Server', 'server_port', '12334', 'text', "Port")
