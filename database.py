@@ -31,7 +31,7 @@ def createFreshTables():
 	db.execute(''' CREATE INDEX sourceIndex ON jobs(source ASC) ''')
 	db.execute(''' CREATE INDEX statusIndex ON jobs(status ASC) ''')
 
-	db_connection.commit()	
+	db_connection.commit()
 	db_connection.close()
 
 def connectToDB():
@@ -168,8 +168,33 @@ def getConfig(config_name='all'):
 				logger.log("Unable to get config info - " + error)
 				db_connection.close()
 
+def updateJobStatus(id,requestedStatus):
+	
+	try:
+		db_connection = connectToDB()
+		db = db_connection.cursor()
+
+		if requestedStatus == "failed":
+			db.execute('''UPDATE jobs SET status=? where id=?''', ("Failed", id,))
+		elif requestedStatus == "downloading":
+			db.execute('''UPDATE jobs SET status=? where id=?''', ("Downloading", id,))
+		elif requestedStatus == "successful":
+			db.execute('''UPDATE jobs SET status=? where id=?''', ("Successful", id,))
+		elif requestedStatus == "queued":
+			db.execute('''UPDATE jobs SET status=? where id=?''', ("Queued", id,))
+
+		try:
+			db_connection.commit()
+			db_connection.close()
+		except Exception, err:
+			for error in err:
+				logger.log(error)
+				db_connection.close()
+	except Exception, err:
+		for error in err:
+			db_connection.close()
+			logger.log("Unable to update record - " + error)
 #def deleteJobByID(id):
 
 #def deleteJobByURL(url):
 #def modifyConfiguration:
-
