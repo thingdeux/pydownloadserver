@@ -63,5 +63,3 @@ def manageQueues():
                     download_threads.append(downloadContainer) #put it in a list to check on later
 
             time.sleep(15) #sleep for 15 seconds before we try to find new downloads again
-
-    isRunning = False
