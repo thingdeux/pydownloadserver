@@ -168,9 +168,6 @@ def getConfig(config_name='all'):
 				logger.log("Unable to get config info - " + error)
 				db_connection.close()
 
-#def deleteJobByID(id):
-#def deleteJobByURL(url):
-
 def changeJobStatusByID(job_id, new_status):
 
 	if new_status in ('Succesful', 'Failed', 'Queued', 'Downloading'):
@@ -190,4 +187,15 @@ def changeJobStatusByID(job_id, new_status):
 	else:
 		logger.log("Attempting to update job with an invalid status")
 
-#def modifyConfiguration:
+def modifyConfigurationItemByName(config_parameter_name, new_value):
+	try:
+		db_connection = connectToDB()
+		db = db_connection.cursor()			
+		db.execute('UPDATE config SET value = :new_value WHERE name = :name ', {"name": config_parameter_name, "new_value": new_value } )
+		db_connection.commit()
+		db_connection.close()
+	
+	except Exception, err:
+		for error in err:
+			logger.log("Unable to get config info - " + error)
+			db_connection.close()

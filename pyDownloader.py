@@ -131,4 +131,4 @@ def startWebServer():
                 logger.log("Unable to create DB: " + error)            
             
     
-#startWebServer()
+startWebServer()
