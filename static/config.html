@@ -27,16 +27,23 @@
 					<form name = "config" method="post">
 						
 						<div id="configBoxes">
-							<table>								
-									<th>General:</th>
-									<tr><td>Gmail Username: </td> 
-										<td><input type="text" size=20 name="configGmailUsername>"></input></td></tr>
-											<tr><td>Gmail Password: </td>
-										<td><input type="password" size=20 name="configGmailPassword>"></input></td></tr>
-									<tr><td>Download Location: </td>
-										<td><input type="text" size=20 name="downloadLocation>"></input></td></tr>
-									<tr><td>Other Thing: </td>
-										<td><input type="text" size=20 name="downloadURL>"></td></tr>								
+							<table>
+								<!-- Only display each config_type once then build its parameters !-->
+								<% header_tracker = [] %>
+								%for db_id, config_type, config_param, value, html_tag, html_display_name in config_data:									
+																		
+									%if config_type not in header_tracker:									
+										<th>${config_type}</th>
+										<% header_tracker.append(config_type) %>
+									%endif
+
+									<tr>
+										<td>${config_param}</td>
+										<td><input type=${html_tag} value=${value}></input></td>
+									</tr>
+
+								%endfor
+									
 							</table>													
 						</div>						
 						<div id="saveConfigButton">

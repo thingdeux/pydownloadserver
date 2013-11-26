@@ -138,6 +138,13 @@ def insertJob(url, source):
 #Pull config info from the DB
 def getConfig(config_name='all'):
 
+	def tupleToList(passed_tuple):
+		built_list = []
+		for item in passed_tuple:
+			built_list.append(item)
+
+		return (built_list)
+
 	if config_name == 'all' or config_name == '':
 		try:
 			db_connection = connectToDB()
@@ -152,7 +159,7 @@ def getConfig(config_name='all'):
 				for error in err:
 					logger.log("Unable to get config info - " + error)
 					db_connection.close()
-				return (False)				
+				return (False)	
 	else:
 		try:
 			db_connection = connectToDB()
@@ -168,6 +175,7 @@ def getConfig(config_name='all'):
 				logger.log("Unable to get config info - " + error)
 				db_connection.close()
 
+<<<<<<< HEAD
 def updateJobStatus(id,requestedStatus):
 	
 	try:
@@ -198,3 +206,36 @@ def updateJobStatus(id,requestedStatus):
 
 #def deleteJobByURL(url):
 #def modifyConfiguration:
+=======
+def changeJobStatusByID(job_id, new_status):
+
+	if new_status in ('Succesful', 'Failed', 'Queued', 'Downloading'):
+
+		try:
+			db_connection = connectToDB()
+			db = db_connection.cursor()		
+			db.execute('UPDATE jobs SET status =:status WHERE id=:id', {"status":new_status, "id":job_id} )
+
+			db_connection.commit()		
+			db_connection.close()
+			
+		except Exception, err:
+			for error in err:
+				logger.log("Unable to modify job - " + error)
+				db_connection.close()
+	else:
+		logger.log("Attempting to update job with an invalid status")
+
+def modifyConfigurationItemByName(config_parameter_name, new_value):
+	try:
+		db_connection = connectToDB()
+		db = db_connection.cursor()			
+		db.execute('UPDATE config SET value = :new_value WHERE name = :name ', {"name": config_parameter_name, "new_value": new_value } )
+		db_connection.commit()
+		db_connection.close()
+	
+	except Exception, err:
+		for error in err:
+			logger.log("Unable to get config info - " + error)
+			db_connection.close()
+>>>>>>> 1681cf8be4f23e7e5d92e6478b462b27d863ebf3

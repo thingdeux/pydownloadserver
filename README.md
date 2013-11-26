@@ -34,7 +34,9 @@
 			3.  queued (returns all queued only)
 			4.	historical  (returns all succesful/failed)
 			5.	failed  (returns all failed)
-			6.	succesful  (returns all succesful)
+			6.	succesful  (returns all succesful)  
+	-changeJobStatusByID(id, new_status) - set the status of a job by passing it the DB id and new status.
+	-modifyConfigurationItemByName(config_parameter_name, new_value) - set the value of a configuration parameter by passing the name and value.
 
 	-insertJob(url, source) -Insert a job into the download queue - (ex: of source can be web or email)  
 

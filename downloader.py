@@ -33,8 +33,6 @@ def manageQueues():
 
 
     max_number_of_downloads = 2
-
-
     download_semaphore=threading.BoundedSemaphore(value=max_number_of_downloads)
 
 
@@ -52,6 +50,7 @@ def manageQueues():
     files_in_active_status = database.getJobs("active")
     files_in_queued_status = []
 
+    print files_in_active_status
 
     #find all files in queued status
     for files in files_in_active_status:
@@ -61,18 +60,10 @@ def manageQueues():
             defaultFileName = makeDownloadFileName(url)
             file_to_queue = [uniqueID, url]
             if not any(uniqueID in downloads for downloads in files_in_queued_status):
+                print "I queued a download"
                 files_in_queued_status.append(file_to_queue) #Keeping track of what I've queued
                 downloadContainer = myDownload.myDownload(url,defaultPath, defaultFileName,uniqueID, download_semaphore)
-                #downloadContainer.start() #start the thread
+                downloadContainer.start() #start the thread
                 download_threads.append(downloadContainer) #put it in a list to check on later
-
-
-
-    #not sure if this is actually working thanks to how fast its downloading.
-    #I'll need a beefy file to download to test this portion.
-    if ThreadStatusDebug == True:
-        for t in download_threads:
-            t.start()
-
 
 #manageQueues()
