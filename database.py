@@ -101,6 +101,8 @@ def getJobs(resultRequested):
 			db.execute('''SELECT * from jobs WHERE status ="Failed" ''')
 		elif resultRequested is "succesful":
 			db.execute('''SELECT * from jobs WHERE status = "Succesful" ''')
+        elif resultRequested is "queued":
+			db.execute('''SELECT * from jobs WHERE status = "Queued" ''')
 
 		data = db.fetchall()		
 		db_connection.close()
