@@ -54,8 +54,8 @@ class myDownload(threading.Thread):
         try:
             self.response = urllib2.urlopen(self.url)
         except:
-            #need error handling to let us know wtf happened
             database.updateJobStatus(int(self.threadID), "failed") #Update status to failed
+            logger.log("Error connecting to remote server to download file")
             self.__releaseAndExit()
 
 
@@ -81,6 +81,7 @@ class myDownload(threading.Thread):
             self.__releaseAndExit()
 
         else:
+            logger.log("Server responded with a code other than 200")
             database.updateJobStatus(int(self.threadID), "failed") #Update status to failed
             #following releases the lock so we can fire the next download
             self.__releaseAndExit()
