@@ -30,8 +30,13 @@ def makeDownloadFileName(url):
 
 
 def manageQueues():
+    try:
+        if isRunning == True: 
+            pass
+    except:
+        isRunning = False
 
-
+    isRunning = True
     max_number_of_downloads = 2
     download_semaphore=threading.BoundedSemaphore(value=max_number_of_downloads)
 
@@ -52,18 +57,21 @@ def manageQueues():
 
     print files_in_active_status
 
-    #find all files in queued status
-    for files in files_in_active_status:
-        if files[2] == "Queued":
-            uniqueID = files[0]
-            url = files[1]
-            defaultFileName = makeDownloadFileName(url)
-            file_to_queue = [uniqueID, url]
-            if not any(uniqueID in downloads for downloads in files_in_queued_status):
-                print "I queued a download"
-                files_in_queued_status.append(file_to_queue) #Keeping track of what I've queued
-                downloadContainer = myDownload.myDownload(url,defaultPath, defaultFileName,uniqueID, download_semaphore)
-                downloadContainer.start() #start the thread
-                download_threads.append(downloadContainer) #put it in a list to check on later
+    while True:
+            #find all files in queued status
+        for files in files_in_active_status:
+            if files[2] == "Queued":
+                uniqueID = files[0]
+                url = files[1]
+                defaultFileName = makeDownloadFileName(url)
+                file_to_queue = [uniqueID, url]
+                if not any(uniqueID in downloads for downloads in files_in_queued_status):
+                    print "I queued a download"
+                    files_in_queued_status.append(file_to_queue) #Keeping track of what I've queued
+                    downloadContainer = myDownload.myDownload(url,defaultPath, defaultFileName,uniqueID, download_semaphore)
+                    downloadContainer.start() #start the thread
+                    download_threads.append(downloadContainer) #put it in a list to check on later
 
-#manageQueues()
+            time.sleep(15) #sleep for 15 seconds before we try to find new downloads again
+
+    isRunning = False
