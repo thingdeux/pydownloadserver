@@ -30,18 +30,8 @@ def makeDownloadFileName(url):
 
 
 def manageQueues():
-    try:
-        if isRunning == True: 
-            pass
-    except:
-        isRunning = False
-
-    isRunning = True
     max_number_of_downloads = 2
     download_semaphore=threading.BoundedSemaphore(value=max_number_of_downloads)
-
-
-    #threadLock = threading.Lock()
 
     ThreadStatusDebug = True
 
