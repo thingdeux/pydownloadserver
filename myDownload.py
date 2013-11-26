@@ -26,14 +26,9 @@ class myDownload(threading.Thread):
         self.sema.release()
         exit()
 
-
     def __getResponsecode(self):
         code = self.response.code
         return code
-
-    def __saveToFile(self):
-        #Some code here? Maybe pass the data over from run if you want to split them into two
-        return False
 
     def run(self):
         #Aquire a lock based on number of allowed concurrent processes
@@ -67,8 +62,6 @@ class myDownload(threading.Thread):
             database.updateJobStatus(int(self.threadID), "failed") #Update status to failed
             #following releases the lock so we can fire the next download
             self.__releaseAndExit()
-
-
 
     def getProgress(self):
         try:
