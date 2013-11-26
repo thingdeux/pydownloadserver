@@ -139,5 +139,5 @@ def startWebServer():
 
 
 t1 = threading.Thread(target=downloader.manageQueues)
-runCronJobs() #give queue manager an initial kick start through the cron
 startWebServer()
+runCronJobs() #give queue manager an initial kick start through the cron
