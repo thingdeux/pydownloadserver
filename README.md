@@ -30,10 +30,11 @@
 	-getJobs(requestedJob) -returns python list of jobs in the queue - can be passed the following params:  
 
 			1.	all  
-			2.	active  (returns all queued/downloading)
-			3.	historical  (returns all succesful/failed)
-			4.	failed  (returns all failed)
-			5.	succesful  (returns all succesful)
+			2.	active  (returns all queued & downloading)
+			3.  queued (returns all queued only)
+			4.	historical  (returns all succesful/failed)
+			5.	failed  (returns all failed)
+			6.	succesful  (returns all succesful)
 
 	-insertJob(url, source) -Insert a job into the download queue - (ex: of source can be web or email)  
 
