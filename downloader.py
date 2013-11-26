@@ -42,13 +42,11 @@ def manageQueues():
 
 
     download_threads= []
-    files_in_active_status = database.getJobs("active")
     files_in_queued_status = []
 
-    print files_in_active_status
-
     while True:
-            #find all files in queued status
+        #find all files in queued status
+        files_in_active_status = database.getJobs("active")
         for files in files_in_active_status:
             if files[2] == "Queued":
                 uniqueID = files[0]
@@ -56,10 +54,8 @@ def manageQueues():
                 defaultFileName = makeDownloadFileName(url)
                 file_to_queue = [uniqueID, url]
                 if not any(uniqueID in downloads for downloads in files_in_queued_status):
-                    print "I queued a download"
                     files_in_queued_status.append(file_to_queue) #Keeping track of what I've queued
                     downloadContainer = myDownload.myDownload(url,defaultPath, defaultFileName,uniqueID, download_semaphore)
                     downloadContainer.start() #start the thread
                     download_threads.append(downloadContainer) #put it in a list to check on later
-
-            time.sleep(15) #sleep for 15 seconds before we try to find new downloads again
+        time.sleep(15) #sleep for 15 seconds before we try to find new downloads again
