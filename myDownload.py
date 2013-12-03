@@ -11,6 +11,8 @@ import threading
 import logger
 import database
 import os
+import datetime
+
 
 class myDownload(threading.Thread):
     def __init__(self, url, pathToSave, filename, threadID, sema):
@@ -23,6 +25,8 @@ class myDownload(threading.Thread):
         self.location_to_save = pathToSave + filename
         self.progress = None
         self.response = None
+        self.chunk_variable_size = 1
+        self.downloadable_chunk_size = self.chunk_variable_size*32768
 
     def __releaseAndExit(self):
         self.sema.release()
@@ -32,19 +36,26 @@ class myDownload(threading.Thread):
         code = self.response.code
         return code
 
-    def getProgress(self):
-        try:
-            total_size = self.response.info().getheader('Content-Length').strip()
-            total_size = int(total_size)
-            bytes_so_far = 0
-            chunk_size = 8192
-            chunk = self.response.read(chunk_size)
-            bytes_so_far += len(chunk)
-            percent = float(bytes_so_far) / total_size
-            percent = round(percent * 100, 2)
-            return percent
-        except:
-            logger.log ("error retrieving progress")
+    def __getAverageSpeed(self, list_of_speeds):
+        ## Here for possible use later -- Takes list of speeds and returns average speeds in
+        ## bytes per second
+        number_of_items = 0
+        sum_of_speeds = 0
+        for speed in list_of_speeds:
+            number_of_items = number_of_items + 1
+            sum_of_speeds = sum_of_speeds + float(speed)
+            average_speed = sum_of_speeds/number_of_items
+        return average_speed
+
+    def getSpeed(self, chunk_size, date_time_start_of_chunk, date_time_end_of_chunk):
+        delta_time = date_time_end_of_chunk - date_time_start_of_chunk
+        bytes_over_time = chunk_size / float(delta_time.microseconds)
+        return bytes_over_time
+
+    def getTimeRemaining(self, bytes_so_far, speed):
+        total_size = self.response.info().getheader('Content-Length').strip()
+        amount_remaining = int(total_size)-int(bytes_so_far)
+        return (speed*amount_remaining)/1000000
 
     def run(self):
         #Aquire a lock based on number of allowed concurrent processes
@@ -58,25 +69,49 @@ class myDownload(threading.Thread):
             logger.log("Error connecting to remote server to download file")
             self.__releaseAndExit()
 
-
         if self.__getResponsecode() == 200:
-            #The following breaks down any downloading into memory manageable 32MB chunks.
-            downloadable_chunk_size = 16*32768
-
+            
             ##check if file name already exists, if so, add a number
             somenumber = 1
             while os.path.isfile(self.location_to_save):
                 self.location_to_save = self.pathToSave + "(" + str(somenumber) + ")" + self.filename
                 somenumber = somenumber + 1
 
-            #open the file and save
+            ##Update the database to let everyone know we're now in downloading status
             database.updateJobStatus(int(self.threadID), "downloading")
+
+            chunk_loop_number = 0
+            bytes_so_far = 0
             with open(self.location_to_save, 'wb') as file_object:
                 while True:
-                    chunk = self.response.read(downloadable_chunk_size)
+                    #get_speed = False
+                    
+                    date_time_start_of_chunk = datetime.datetime.now()
+                    chunk = self.response.read(self.downloadable_chunk_size)
                     if not chunk: break
+                    date_time_end_of_chunk = datetime.datetime.now()
+                    chunk_download_speed = self.getSpeed(len(chunk), date_time_start_of_chunk, date_time_end_of_chunk)
+                    
+                    date_time_start_of_write = datetime.datetime.now()
                     file_object.write(chunk)
-            database.updateJobStatus(int(self.threadID), "successful") #Update status to failed
+                    date_time_end_of_write = datetime.datetime.now()
+                    chunk_write_speed = self.getSpeed(len(chunk), date_time_start_of_write, date_time_end_of_write)
+
+                    #try and find optimal chunking speed
+                    if chunk_write_speed < chunk_download_speed:
+                        self.chunk_variable_size = self.chunk_variable_size + .2
+
+                    bytes_so_far += len(chunk)
+                    
+                    time_remaining = self.getTimeRemaining(bytes_so_far, chunk_download_speed)
+                    
+                    #Write time remaining & download speed once every 5 chunks to help reduce excessive database writes. 
+                    if chunk_loop_number == 5:
+                        reported_time_remaining = "{0:.2f}".format(time_remaining) #time remaining in seconds
+                        reported_download_speed = str(int((chunk_download_speed*1000000)/1024)) #speed in KB/s
+
+                    chunk_loop_number = chunk_loop_number + 1
+            database.updateJobStatus(int(self.threadID), "successful")
             #following releases the lock so we can fire the next download
             self.__releaseAndExit()
 
@@ -85,3 +120,25 @@ class myDownload(threading.Thread):
             database.updateJobStatus(int(self.threadID), "failed") #Update status to failed
             #following releases the lock so we can fire the next download
             self.__releaseAndExit()
+
+
+###BELOW FOR TESTING###
+def makeDownloadFileName(url):
+    downloadFileName = url.split('/')[-1]
+    return downloadFileName
+
+if __name__ == '__main__':
+    
+    max_number_of_downloads = 2
+    download_semaphore=threading.BoundedSemaphore(value=max_number_of_downloads)
+    
+    test_url_1 = "http://ipv4.download.thinkbroadband.com/512MB.zip"
+    test_url_2 = "http://ipv4.download.thinkbroadband.com/50MB.zip"
+    test_file_name_1 = makeDownloadFileName(test_url_1)
+    test_file_name_2 = makeDownloadFileName(test_url_2)
+
+    t1 = myDownload(test_url_1, '/home/jason/tmp/', test_file_name_1, 1, download_semaphore)
+    t2 = myDownload(test_url_2, '/home/jason/tmp/', test_file_name_2, 2, download_semaphore)
+
+    # t1.start()
+    t2.start()
