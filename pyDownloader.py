@@ -135,9 +135,9 @@ def startWebServer():
             startWebServer()
         except Exception, err:
             for error in err:
-                logger.log("Unable to create DB: " + error)         
+                logger.log("Unable to create DB: " + error)
 
+    ti.start() #Start up the Backend Queue Manager
 
 t1 = threading.Thread(target=downloader.manageQueues)
 startWebServer()
-runCronJobs() #give queue manager an initial kick start through the cron
