@@ -202,8 +202,20 @@ def updateJobStatus(id,requestedStatus):
 			db_connection.close()
 			logger.log("Unable to update record - " + error)
 
-#def deleteJobByID(id):
+def updateTimeRemainingByID(job_id, time_remaining):
+	try:
+		db_connection = connectToDB()
+		db = db_connection.cursor()
+		db.execute('UPDATE jobs SET time_left =:time_left WHERE id=:id', {"time_left":time_remaining, "id":job_id} )
 
+		db_connection.commit()
+		db.connection.close()
+
+	except Exception, err:
+		for error in err:
+			logger.log("Unable to modify job - " + error)
+			db_connection.close()
+#def deleteJobByID(id):
 #def deleteJobByURL(url):
 #def modifyConfiguration:
 
