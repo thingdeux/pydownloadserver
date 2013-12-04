@@ -112,12 +112,12 @@ def runCronJobs():
     #downloader.manageQueues()
     #logger.log("Running")
 
-
 def startWebServer():
     if database.verifyDatabaseExistence():
 
         try:
             if database.verifyDatabaseExistence():
+                t1.start() #Start up the Backend Queue Manager
                 #Register cherrypy monitor - runs every 30 seconds
                 EventScheduler = Monitor(cherrypy.engine, runCronJobs, 30, 'EventScheduler'  )
                 EventScheduler.start()
@@ -136,8 +136,6 @@ def startWebServer():
         except Exception, err:
             for error in err:
                 logger.log("Unable to create DB: " + error)
-
-    ti.start() #Start up the Backend Queue Manager
 
 t1 = threading.Thread(target=downloader.manageQueues)
 startWebServer()
