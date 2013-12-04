@@ -23,13 +23,31 @@ def queueDownload(url, source="web"):
 		for error in err:
 			logger.log("Unable to queue url - " + error)
 
-
 def makeDownloadFileName(url):
     downloadFileName = url.split('/')[-1]
     return downloadFileName
 
+def cleanUpAfterCrash():
+
+    #build save path
+    defaultPath = os.path.dirname(os.path.abspath(__file__))
+    defaultPath = defaultPath + '/tmp/'
+
+    #find those bad download jobs
+    jobs_in_download_status = database.getJobs("downloading")
+    for jobs in jobs_in_download_status:
+        jobID = jobs[0] #here incase I need it later
+        url = jobs[1]
+        defaultFileName = makeDownloadFileName(url)
+        save_location = defaultPath + defaultFileName
+        if os.path.isfile(save_location): os.remove(save_location)
+    database.cleanUpAfterCrash()
+
 
 def manageQueues():
+
+    cleanUpAfterCrash() #Do a clean up in case of crash
+
     max_number_of_downloads = 2
     download_semaphore=threading.BoundedSemaphore(value=max_number_of_downloads)
 
