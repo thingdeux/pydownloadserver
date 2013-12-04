@@ -103,6 +103,8 @@ def getJobs(resultRequested):
 			db.execute('''SELECT * from jobs WHERE status = "Succesful" ''')
 		elif resultRequested is "queued":
 			db.execute('''SELECT * from jobs WHERE status = "Queued" ''')
+		elif resultRequested is "downloading":
+			db.execute('''SELECT * from jobs WHERE status ="Downloading" ''')
 
 		data = db.fetchall()		
 		db_connection.close()
@@ -214,6 +216,20 @@ def updateTimeRemainingByID(job_id, time_remaining):
 	except Exception, err:
 		for error in err:
 			logger.log("Unable to modify job - " + error)
+			db_connection.close()
+
+def cleanUpAfterCrash():
+	try:
+		db_connection = connectToDB()
+		db = db_connection.cursor()
+		db.execute('UPDATE jobs SET status="Queued",time_left="" WHERE status="Downloading"')
+
+		db_connection.commit()
+		db.connection.close()
+
+	except Exception, err:
+		for error in err:
+			logger.log("Unable to cleanup Database after crash - " + error)
 			db_connection.close()
 #def deleteJobByID(id):
 #def deleteJobByURL(url):
