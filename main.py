@@ -1,12 +1,13 @@
 import cherrypy
 import emailCrawl
 import os
-#import downloader
+import downloader
 import logger
 import database
 import threading
 from cherrypy.process.plugins import Monitor
 from cherrypy.process.plugins import BackgroundTask
+from states import setServerShuttingDown
 from jinja2 import Template, Environment, PackageLoader
 
 
@@ -16,6 +17,8 @@ CURRENT_STATE = "debug"
 # bind to all IPv4 interfaces and set port
 current_folder = os.path.dirname(os.path.abspath(__file__))
 env = Environment(loader=PackageLoader('main', 'templates'))
+#Global manager thread var
+manager = 0
 
 cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
                          'server.socket_port': 8000,                        
@@ -40,7 +43,9 @@ conf = {
                         }
         }
 
-class webServer(object):            
+class webServer(object):
+    def __init__(self):
+        cherrypy.engine.subscribe('stop', self.stop)
 
     @cherrypy.expose
     def index(self, **arguments):       
@@ -83,27 +88,40 @@ class webServer(object):
         
         return template.render(config_data=config_parameters)
 
+    def shutdown(self):
+        setServerShuttingDown(True)
+        cherrypy.engine.exit()
 
-def runCronJobs():
-    if t1.isAlive():
-        logger.log("Running")
+    def stop(self):
+        setServerShuttingDown(True)        
+
+def checkManager():
+    global manager
+
+    if not manager.isAlive():                            
+        manager.start()
     else:
-        t1.start()
-        logger.log("Started QueueManager")    
+        logger.log("Running")        
 
 def startWebServer():
+    global manager
+
     if database.verifyDatabaseExistence():
         try:
-            if database.verifyDatabaseExistence():
-                #t1.start() #Start up the Backend Queue Manager
-                #Register cherrypy monitor - runs every 30 seconds
-                #EventScheduler = Monitor(cherrypy.engine, runCronJobs, 30, 'EventScheduler'  )
-                #EventScheduler.start()
-                cherrypy.quickstart(webServer(), config=conf)
-            
+            manager = threading.Thread(target=downloader.queueManager)
+            #Don't wait for thread to close on cherrypy exit stop method will run
+            #And set the serverShuttingDown global to True then the thread will exit
+            manager.daemon = True             
+            manager.start()
+
+            #Register cherrypy monitor - runs every 30 seconds
+            EventScheduler = Monitor(cherrypy.engine, checkManager, 30, 'EventScheduler')
+            EventScheduler.start()   
+
+            cherrypy.quickstart(webServer(), config=conf)        
         except Exception, err:
             for error in err:
-                logger.log("Unable to query DB - " + error)
+                logger.log("Unable to start Web Server - " + str(error))
     else:
         try:
             #Database doesn't exist, create it then recursively try again
@@ -115,7 +133,12 @@ def startWebServer():
             for error in err:
                 logger.log("Unable to create DB: " + error)
 
-if __name__ == "__main__":
-    #t1 = threading.Thread(target=downloader.manageQueues)
-    startWebServer()    
+if __name__ == "__main__":  
+    startWebServer()
+    
+    #try:
+        #t1.start() #Start up the Backend Queue Manager
+        #Register cherrypy monitor - runs every 30 seconds
+        #EventScheduler = Monitor(cherrypy.engine, runCronJobs, 30, 'EventScheduler'  )
+        #EventScheduler.start()     
         

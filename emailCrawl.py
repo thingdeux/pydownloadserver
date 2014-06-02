@@ -10,8 +10,8 @@ import logger
 #E-mail auth information for the pydownloadserver@gmail.com inbox
 #E-mail account: pydownloadserver@gmail.com
 #Birthdate: January 1 1901
-email_username = "pydownloadserver"
-email_password = "Kaiser123"
+email_username = ""
+email_password = ""
 imap_host_name = "imap.gmail.com"
 imap_port = "993"
 
