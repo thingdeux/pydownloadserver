@@ -17,7 +17,7 @@ CURRENT_STATE = "debug"
 # bind to all IPv4 interfaces and set port
 current_folder = os.path.dirname(os.path.abspath(__file__))
 env = Environment(loader=PackageLoader('main', 'templates'))
-#Global manager thread var
+#Global manager singleton for handling thread var
 manager = 0
 
 cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
@@ -96,12 +96,10 @@ class webServer(object):
         setServerShuttingDown(True)        
 
 def checkManager():
+    #Register manager singleton as global
     global manager
-
     if not manager.isAlive():                            
-        manager.start()
-    else:
-        logger.log("Running")        
+        manager.start()    
 
 def startWebServer():
     global manager
@@ -134,11 +132,5 @@ def startWebServer():
                 logger.log("Unable to create DB: " + error)
 
 if __name__ == "__main__":  
-    startWebServer()
-    
-    #try:
-        #t1.start() #Start up the Backend Queue Manager
-        #Register cherrypy monitor - runs every 30 seconds
-        #EventScheduler = Monitor(cherrypy.engine, runCronJobs, 30, 'EventScheduler'  )
-        #EventScheduler.start()     
+    startWebServer()        
         
