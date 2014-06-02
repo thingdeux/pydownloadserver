@@ -1,3 +1,4 @@
+__author__ = 'josh'
 import time
 
 def log(error="Error", severity=4):	

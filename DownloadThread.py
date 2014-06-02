@@ -1,6 +1,4 @@
-__author__ = 'jason'
-
-#Feature request: Each download should run on its own subprocess
+__author__ = 'jason/josh'
 import sh
 import os
 import urllib2
@@ -64,21 +62,7 @@ class DownloadThread(threading.Thread):
         #following releases the lock so we can fire the next download
         self.__releaseAndExit()
 
-###BELOW FOR TESTING###
 def makeDownloadFileName(url):
     downloadFileName = url.split('/')[-1]
     return downloadFileName
-
-if __name__ == '__main__':        
-    """
-    download_semaphore=threading.BoundedSemaphore(value=MAX_NUMBER_OF_DOWNLOADS)    
-    test_url_1 = "http://ipv4.download.thinkbroadband.com/512MB.zip"
-    test_url_2 = "http://ipv4.download.thinkbroadband.com/50MB.zip"
-    test_file_name_1 = makeDownloadFileName(test_url_1)
-    test_file_name_2 = makeDownloadFileName(test_url_2)
-    t1 = myDownload(test_url_1, TEMP_LOCATION, test_file_name_1, 1, download_semaphore)
-    t2 = myDownload(test_url_2, TEMP_LOCATION, test_file_name_2, 2, download_semaphore)
-    t1.start()
-    t2.start()
-    """
     

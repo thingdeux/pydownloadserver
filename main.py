@@ -1,7 +1,8 @@
+__author__ = 'josh'
 import cherrypy
 import emailCrawl
 import os
-import downloader
+from downloadManager import queueDownload, queueManager
 import logger
 import database
 import threading
@@ -58,7 +59,7 @@ class webServer(object):
     def addUrlToQueue(self, **kwargs):
         try:            
             for url in kwargs:
-                downloader.queueDownload(url)                            
+                queueDownload(url)                            
         except:
             for url in kwargs:                
                 logger.log("Unable to queue: " + url)
@@ -106,7 +107,7 @@ def startWebServer():
 
     if database.verifyDatabaseExistence():
         try:
-            manager = threading.Thread(target=downloader.queueManager)
+            manager = threading.Thread(target=queueManager)
             #Don't wait for thread to close on cherrypy exit stop method will run
             #And set the serverShuttingDown global to True then the thread will exit
             manager.daemon = True             

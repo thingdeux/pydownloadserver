@@ -1,10 +1,11 @@
+__author__ = 'josh'
 #Connect  |  Verify Inbox connectivity | check for new e-mails | check the first e-mail for something that looks like a URL |
 # if there's a URL try to download it.  | if there's not  move on
 
 import imaplib
 import email
 import re
-import downloader
+from downloadManager import queueDownload
 import logger
 
 #E-mail auth information for the pydownloadserver@gmail.com inbox
@@ -94,9 +95,9 @@ def queueAllEmailInbox():
         for url in current_inbox:
             if len(url) > 1:  #If the current URL is actually a list of URLS then process each URL
                 for sub_url in url:
-                    downloader.queueDownload(sub_url, "email")
+                    queueDownload(sub_url, "email")
             else: #Only one download URL in the e-mail, queue it up
-                downloader.queueDownload(url[0], "email")
+                queueDownload(url[0], "email")
     except:
         return (False)
 

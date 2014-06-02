@@ -1,23 +1,16 @@
-__author__ = 'jason'
-
-#http://docs.python-requests.org/en/latest/index.html  -- The requests library
-#do a pip install requests before running this
-
-#Feature request: Each download should run on its own subprocess
-
-from myDownload import DownloadThread, makeDownloadFileName
+__author__ = 'jason/josh'
 import time
 import threading
 import logger
 import database
 import os
 from states import isServerShuttingDown
+from DownloadThread import DownloadThread
 
 #Global values
 MAX_NUMBER_OF_DOWNLOADS = 2
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMP_LOCATION = os.path.join(CURRENT_DIR, 'tmp')
-print TEMP_LOCATION
 
 def queueDownload(url, source="web"):
 	try:
@@ -28,6 +21,10 @@ def queueDownload(url, source="web"):
 	except Exception, err:
 		for error in err:
 			logger.log("Unable to queue url - " + error)
+
+def makeDownloadFileName(url):
+    downloadFileName = url.split('/')[-1]
+    return downloadFileName
 
 def cleanUpAfterCrash():    
     #Find all jobs in 'Downloading state'
