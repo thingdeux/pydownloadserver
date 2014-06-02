@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}pyDownloader - Config{% endblock %} 
+
+{% block body %}
+	<div class = "container">
+		<div class ="row">
+			<div class="col-xs-4"></div>
+			<div id = "configBox" class = "col-xs-4">
+				<div id = "configContainer">
+					<form name = "config" method="post">
+						
+						<div id="configBoxes">
+							<table>
+								<!-- Only display each config_type once then build its parameters !-->
+								{% set keys = config_data.keys() %}
+
+								{% for key in keys %}
+									<th>{{key}}</th>
+									{% for db_id, config_type, config_param, value, html_tag, html_display_name in config_data[key] %}
+										<tr>
+											<td>{{html_display_name}}</td>
+											<td><input type="{{html_tag}}" value="{{value}}"></input></td>
+										</tr>
+									{% endfor %}	
+								{% endfor %}												
+							</table>													
+						</div>						
+						<div id="saveConfigButton">
+							<input type = "submit" value = "Save">
+						</div>
+					</form>
+
+				</div>					
+			</div>
+			<div class="col-xs-4"></div>
+		</div>
+	</div>
+{% endblock %}
