@@ -8,6 +8,7 @@ import database
 import threading
 from cherrypy.process.plugins import Monitor
 from cherrypy.process.plugins import BackgroundTask
+from states import isServerShuttingDown
 from states import setServerShuttingDown
 from jinja2 import Template, Environment, PackageLoader
 
@@ -89,17 +90,24 @@ class webServer(object):
         
         return template.render(config_data=config_parameters)
 
-    def shutdown(self):
+    @cherrypy.expose
+    def shutdown(self):        
+        template = env.get_template('shutdown.html')
+        return template.render()                
+
+    @cherrypy.expose
+    def stopServer(self):
         setServerShuttingDown(True)
         cherrypy.engine.exit()
 
     def stop(self):
-        setServerShuttingDown(True)        
+        #Create the below template using config.html (and looking up in the static folder)
+        setServerShuttingDown(True)
 
 def checkManager():
     #Register manager singleton as global
     global manager
-    if not manager.isAlive():                            
+    if not manager.isAlive() and not isServerShuttingDown():                            
         manager.start()    
 
 def startWebServer():

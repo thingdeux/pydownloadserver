@@ -56,12 +56,12 @@ def debugCreateTestData():
 		(None, 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20Setup.exe', "Queued", 0, logger.getTime(), "email"),
 		(None, 'http://xxx.com/buttblasters11.avi', "Queued", 0, logger.getTime(), "email"),
 		(None, 'http://xxx.com/buttblasters21.avi', "Failed", 0, logger.getTime(), "email"),
-		(None, 'http://xxx.com/buttblasters1.avi', "Succesful", 0, logger.getTime(), "web"),
-		(None, 'http://xxx.com/buttblasters2.avi', "Succesful", 0, logger.getTime(), "web"),
+		(None, 'http://xxx.com/buttblasters1.avi', "Successful", 0, logger.getTime(), "web"),
+		(None, 'http://xxx.com/buttblasters2.avi', "Successful", 0, logger.getTime(), "web"),
 		(None, 'http://thisismeaddingaURL.com', "Downloading", 0, logger.getTime(), "email"),
 		(None, 'http://i.imgur.com/lOOw9rq.gif', "Downloading", 0, logger.getTime(), "web"),
 		(None, 'http://google.com/cockmunchers3.avi', "Queued", 0, logger.getTime(), "web"),
-		(None, 'http://xxx.com/buttblasters16.avi', "Succesful", 0, logger.getTime(), "web"),
+		(None, 'http://xxx.com/buttblasters16.avi', "Successful", 0, logger.getTime(), "web"),
 		(None, 'http://xxx.com/buttblasters16.avi', "Failed", 0, logger.getTime(), "email"),			
 	]		
 
@@ -96,11 +96,12 @@ def getJobs(resultRequested):
 		elif resultRequested is "active":
 			db.execute('''SELECT * from jobs WHERE status ="Queued" OR status = "Downloading" ''')
 		elif resultRequested is "historical":
-			db.execute('''SELECT * from jobs WHERE status = "Succesful" OR status = "Failed" ''')
+			db.execute('''SELECT * from jobs WHERE status = "Successful" OR status = "Failed" 
+						  ORDER BY "time_queued" ASC''')
 		elif resultRequested is "failed":
 			db.execute('''SELECT * from jobs WHERE status ="Failed" ''')
 		elif resultRequested is "succesful":
-			db.execute('''SELECT * from jobs WHERE status = "Succesful" ''')
+			db.execute('''SELECT * from jobs WHERE status = "Successful" ''')
 		elif resultRequested is "queued":
 			db.execute('''SELECT * from jobs WHERE status = "Queued" ''')
 		elif resultRequested is "downloading":

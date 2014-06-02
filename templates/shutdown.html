@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}pyDownloader{% endblock %}
+
+{% block body %}
+	
+	<div class = "container">
+		<div class="row">			
+			<div class = "col-xs-12 text-center">
+				<h2>Shutting down .....</h2>
+			</div>			
+		</div>
+	</div>
+
+	{%block extrajs %}
+		<script type="text/javascript">
+			$.ajax({
+				type: "POST",
+				url: "/stopServer"
+			});		
+		</script>
+	{%endblock%}
+{% endblock %}
