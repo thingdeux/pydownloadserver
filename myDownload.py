@@ -77,8 +77,7 @@ def makeDownloadFileName(url):
     downloadFileName = url.split('/')[-1]
     return downloadFileName
 
-if __name__ == '__main__':
-    
+if __name__ == '__main__':    
     max_number_of_downloads = 2
     download_semaphore=threading.BoundedSemaphore(value=max_number_of_downloads)
     

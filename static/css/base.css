@@ -2,56 +2,58 @@ body {
 	background-color:white;	
 }
 
-#container{	
-	margin-top: 2%;
-	font-family: "Tahoma";
+.navbar-toggle {
+	background-color: green;
+}
+	.icon-bar {
+		background-color: black;
+	}
+#add_to_queue_container {
+	padding-left: 50px;
 }
 
-#navigation {			
-	position: relative;
-	left: 1%;
-	min-width: 48px;
-	max-width: 48px;	
-	color: green;
-	z-index: 2;
+#configBox {
+	margin-top: 25px;
 }
-#navbar {
-	font-weight: bold;
-	font-size: 20px;	
+
+#queueTable{		
+	font-size: 13px;				
+	color: black;		
 }
-#goodieBox {						
-	position: relative;
-	margin-left: 60%;
-	padding-left: 20%;
-	white-space: nowrap;
-	top: -90px;	
-	left: 45px;
-}
-#queueTable{	
-	position: relative;
-	text-align: center;			
-	font-size: 13px;			
-	width: 100px;
-	max-width: 50px;
-	color: black;
-	z-index: 2;			
-}
-#table_url {
-	min-width: 240px;
+	.table_pad { padding: 5px; }
+	.table_url {
+		min-width: 600px;		
+		max-width: 600px;
+	}
+	.time_left {		
+		min-width: 80px;
+		max-width: 80px;
+	}
+	.added_on {		
+		min-width: 170px;
+		max-width: 170px;
+	}
+	.source {
+		min-width: 80px;
+		max-width: 80px;
+	}
+
+#steps {
+	margin-top: 25px;
+	margin-bottom: 25px;
 }
 
 #statusTableHeader{		
 	font-size: 14px;			
-	font-weight: bold;
-	min-width: 140px;
-	max-width: 240px;
-	background-color: green;	
+	font-weight: bold;	
+	background-color: green;
+	border-style: solid;
+	border-color: black;
 	color:  #E3F8E3;	
 }
 
 #inputBox {			
-	margin-bottom: 0.5%;
-	position: relative;
+	margin-bottom: 0.5%;	
 	min-width: 300px;
 	max-width: 300px;
 	width: 300px;
@@ -59,11 +61,11 @@ body {
 	top: 30px;
 }
 
-#addToQueueButton {	
-	position: relative;	
+#addToQueueButton {		
 	text-align: center;	
 	margin-top: 10px;	
 }
+
 #saveConfigButton {
 	position: relative;
 	margin-top: 6px;
@@ -77,14 +79,13 @@ body {
 	width: 500px;	
 }
 
-#configBoxes{	
+#configBoxes{
 	color:black;	
 	font-size: 10px;		
 	min-width: 200px;
 	max-width: 200px;
 }
-#QueueErrorBox{
-	position: relative;
+#QueueErrorBox{	
 	color:black;
 	font-weight: bold;
 	top: 6px;
@@ -96,12 +97,18 @@ body {
 	color: green;
 	margin-right: -.2%;		
 	font-family: "Tahoma";
+	color:green
+}
+
+.nav_link {
+	font-size: 22px;
 }
 
 .bigpy{
 	font-size: 30px;
 	font-weight: 400;
 	font-family: "Tahoma";
+	color: black;
 }
 
 a.smallpylink:link {text-decoration: none; color:green;}
@@ -113,3 +120,8 @@ a.bigpylink:link {text-decoration: none; color:black;}
 a.bigpylink:visited {text-decoration: none; color:black;}
 a.bigpylink:hover {text-decoration: none; color:black;}
 a.bigpylink:active {text-decoration: none; color:black;}
+
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: transparent;
+}

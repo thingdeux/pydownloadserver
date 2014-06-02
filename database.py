@@ -140,12 +140,16 @@ def insertJob(url, source):
 #Pull config info from the DB
 def getConfig(config_name='all'):
 
-	def tupleToList(passed_tuple):
-		built_list = []
+	def confToDict(passed_tuple):
+		built_dict = {}
 		for item in passed_tuple:
-			built_list.append(item)
-
-		return (built_list)
+			try:
+				len(built_dict[item[1]])
+				built_dict[item[1]].append(item)
+			except:
+				built_dict[item[1]] = []
+				built_dict[item[1]].append(item)
+		return (built_dict)
 
 	if config_name == 'all' or config_name == '':
 		try:
@@ -155,7 +159,7 @@ def getConfig(config_name='all'):
 			config_data = db.fetchall()
 			db_connection.close()
 
-			return (config_data)
+			return (confToDict(config_data))
 
 		except Exception, err:
 				for error in err:
@@ -166,12 +170,12 @@ def getConfig(config_name='all'):
 		try:
 			db_connection = connectToDB()
 			db = db_connection.cursor()			
-			db.execute('SELECT * FROM config WHERE name=?', (config_name,) )
+			db.execute('SELECT * FROM config WHERE name=? GROUP BY=?', (config_name,config_name) )
 
 			config_item = db.fetchall()			
 			db_connection.close()
 
-			return ( config_item )
+			return ( confToDict(config_item) )
 		except Exception, err:
 			for error in err:
 				logger.log("Unable to get config info - " + error)
@@ -231,9 +235,6 @@ def cleanUpAfterCrash():
 		for error in err:
 			logger.log("Unable to cleanup Database after crash - " + error)
 			db_connection.close()
-#def deleteJobByID(id):
-#def deleteJobByURL(url):
-#def modifyConfiguration:
 
 def changeJobStatusByID(job_id, new_status):
 
@@ -266,3 +267,9 @@ def modifyConfigurationItemByName(config_parameter_name, new_value):
 		for error in err:
 			logger.log("Unable to get config info - " + error)
 			db_connection.close()
+
+if __name__ == "__main__":
+	test = getConfig()
+	for thing in test.keys():
+		print test[thing]
+		

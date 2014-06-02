@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}pyDownloader{% endblock %}
+
+{% block body %}
+	
+	<div class = "container">
+		<div class="row">			
+			<div class = "col-xs-12 text-center">
+				<h2 id="welcome">Welcome to <span class="smallpy">py</span>Downloader!</h2>
+			</div>			
+		</div>
+	</div>
+
+	<div class = "container">
+		<div class="row">			
+			<div class = "col-xs-12 text-center">
+				<p id="sub_tab">The Fire and Forget Downloader</p>
+			</div>			
+		</div>
+	</div>
+
+	<div id = "steps" class = "container">
+		<div class="row">
+			<div class="col-xs-3"></div>
+			<div class = "col-xs-2 text-center">				
+				<span style="font-size: 50px;" class="glyphicon glyphicon-globe"></span>
+				<p id="sub_tab">Add a URL below</p>
+			</div>			
+			<div class = "col-xs-2 text-center">
+				<span style="font-size: 50px;" class="glyphicon glyphicon-plus"></span>
+				<p id="sub_tab">Click 'Add to Queue'</p>
+			</div>			
+			<div class = "col-xs-2 text-center">
+				<span style="font-size: 50px;" class="glyphicon glyphicon-thumbs-up"></span>
+				<p id="sub_tab">Profit!</p>
+			</div>			
+			<div class="col-xs-3"></div>
+		</div>
+	</div>
+
+	<div class = "container">
+		<div class="row">
+			<div class = "col-sm-4"></div>
+
+			<div id = "add_to_queue_container" class="col-md-4">		
+				<form name="input">
+					<div id="inputBox">											
+						<input type="text" size=35 id = "addToQueueText">
+					
+						<div id="addToQueueButton">
+							<button type="button" class="btn btn-success">Add to Queue</button>
+							<div id = "QueueErrorBox"></div>
+							<p></p>						
+						</div>
+											
+					</div>
+				</form>
+			</div>
+
+			<div class = "col-sm-4"></div>
+		</div>
+	</div>
+
+	
+
+
+{% endblock %}

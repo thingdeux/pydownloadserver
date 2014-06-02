@@ -44,7 +44,7 @@ $(document).ready(function() {
 	
 	// --- Index Page --- //
 	//Handler for queue button being clicked on index page.
-	$("#addToQueueButton").click(function() {
+	$("#addToQueueButton").click(function() {		
 		attemptQueue();			
 	});
 

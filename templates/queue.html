@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}pyDownloader - Queue{% endblock %} 
+
+{%block body %}	
+	<div id = "goodieBox">
+		<div id="queueTable">
+		    <table border = "1">				    	
+		    	<th id = "statusTableHeader" class="text-center">URL</th>
+		    	<th id = "statusTableHeader" class="text-center">Status</th>
+		    	<th id = "statusTableHeader" class="text-center">Time Left</th>
+		    	<th id = "statusTableHeader" class="text-center">Added On</th>
+		    	<th id = "statusTableHeader" class="text-center">Source</th>
+			       {% for row_id, url, status, time_left, time_queued, source in active_queue_data %}
+			        <tr>
+			        	<td class="table_pad table_url">{{url}}</td>
+			        	<td class="table_pad status">{{status}}</td>
+			        	<td class="table_pad time_left">{{time_left}}</td>
+			        	<td class="table_pad added_on">{{time_queued}}</td>
+			        	<td class="table_pad source">{{source}}</td>
+			        </tr>
+			        {% endfor %}
+			    	
+		    </table>
+		</div>
+	</div>
+				
+{% endblock %}

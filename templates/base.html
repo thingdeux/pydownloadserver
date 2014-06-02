@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<title>
+    {% block title %}pyDownloader{% endblock %}  
+</title>
+    <link rel="stylesheet" href="/static/css/lib/bootstrap.min.css" type="text/css">  
+    <link rel="stylesheet" href="/static/css/lib/bootstrap-theme.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/base.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
+    
+    
+   	
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+        </button>
+      <a class="navbar-brand " href="/">
+        <span class='smallpylink smallpy'>py</span>
+        <span class='bigpylink bigpy'>Downloader</span>
+      </a>
+    </div>
+
+    <div id = "topbar" class="collapse navbar-collapse">      
+      <ul class="nav navbar-nav">
+        <li><a href="/" class='smallpylink nav_link'>Home</span></a></li>
+        <li><a href="queue" class="smallpylink nav_link">Queue<br></a></li>
+        <li><a href="history" class="smallpylink nav_link">History<br></a></li>
+        <li><a href="config" class="smallpylink nav_link">Config<br></a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div id = "main_container" class="container">
+    <div class="row">
+      <div class = "col-sm-12">
+        {% block body %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+
+  {% block footer %}
+  <div id = "footer">  
+  </div>
+  {% endblock%}
+  
+  <script type="text/javascript" src="/static/js/lib/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="/static/js/lib/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/static/js/basic_functionality.js"></script>  
+  {% block extrajs %}
+  {% endblock %}
+</body>
+
+</html>
