@@ -30,27 +30,27 @@ class DownloadThread(threading.Thread):
 
     def download(self,url):
         def verifyValidUrl(header):
-            try:            
-                if header.status == 200:
+            try:           
+                if header.status_code == 200:                    
                     return True
-                else:
+                else:                    
                     return False
             except:
                 return False
 
         def getFileSize(header):
-            try:                            
-                file_size = header.headers['content-length']
-                return file_size
+            try:
+                #HTTP Content-length header - converted to MB's                            
+                file_size = int(header.headers['content-length']) / 1048576                
+                return float(file_size)
             except:
                 return 0.0
 
         try:
             header = head(self.url)
 
-            if verifyValidUrl(header):
-                #Filesize (converted to MB's)
-                filesize = float( int(getFileSize()) / 1048576 )        
+            if verifyValidUrl(header):                
+                filesize = getFileSize(header)
                 #http Get on the file location
                 download = get(url, stream=True)
                 #Update the current download 
@@ -64,12 +64,16 @@ class DownloadThread(threading.Thread):
                             f.flush()
                             downloaded = downloaded + 1.0
                             #Get complete percentage
-                            self.progress = (downloaded/filesize) * 100                        
-                return save_location 
+                            if filesize > 0.0:
+                                self.progress = (downloaded/filesize) * 100
+                            else:
+                                self.progress = "--"
+                return self.location_to_save
             else:
                 logger.log("Invalid URL")    
-        except:
-            logger.log("Invalid URL")
+        except Exception, err:
+            for error in err:
+                logger.log("Invalid URL - " + error)
         
 
     def run(self):

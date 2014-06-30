@@ -11,6 +11,7 @@ from DownloadThread import DownloadThread
 MAX_NUMBER_OF_DOWNLOADS = 2
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMP_LOCATION = os.path.join(CURRENT_DIR, 'tmp')
+ACTIVE_DOWNLOADS = []
 
 def queueDownload(url, source="web"):
 	try:
@@ -47,8 +48,7 @@ def queueManager():
     
     if not os.path.isdir(TEMP_LOCATION):
 	    os.mkdir(TEMP_LOCATION)
-
-    download_threads= []
+    
     files_in_queued_status = []
 
     while not isServerShuttingDown():
@@ -67,5 +67,8 @@ def queueManager():
                     downloadContainer = DownloadThread(url,TEMP_LOCATION, defaultFileName,uniqueID, download_semaphore)
                     downloadContainer.daemon = True
                     downloadContainer.start() #start the thread
-                    download_threads.append(downloadContainer) #put it in a list to check on later        
+                    ACTIVE_DOWNLOADS.append(downloadContainer) #put it in a list to check on later        
         time.sleep(15) #sleep for 15 seconds before we try to find new downloads again
+
+def getDownloads():
+    return ACTIVE_DOWNLOADS
