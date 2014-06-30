@@ -5,17 +5,15 @@
 {%block body %}	
 	<div id = "goodieBox">
 		<div id="queueTable">
-		    <table border = "1">				    	
+		    <table class="table table-bordered table-responsive">				    	
 		    	<th class="text-center statusTableHeader table_url">URL</th>
-		    	<th class="text-center statusTableHeader  status">Status</th>
-		    	<th class="text-center statusTableHeader time_left">Time Left</th>
+		    	<th class="text-center statusTableHeader status">Status</th>		    	
 		    	<th class="text-center statusTableHeader added_on">Added On</th>
 		    	<th class="text-center statusTableHeader source">Source</th>
-			       {% for row_id, url, status, time_left, time_queued, source in active_queue_data %}
+			       {% for row_id, url, status, time_queued, source in active_queue_data %}
 			        <tr>
 			        	<td class="table_pad">{{url}}</td>
-			        	<td class="table_pad">{{status}}</td>
-			        	<td class="table_pad">{{time_left}}</td>
+			        	<td class="table_pad">{{status}}</td>			        	
 			        	<td class="table_pad">{{time_queued}}</td>
 			        	<td class="table_pad">{{source}}</td>
 			        </tr>

@@ -1,5 +1,5 @@
 __author__ = 'jason/josh'
-import sh
+from requests import head, get, request
 import os
 import urllib2
 import codecs
@@ -19,24 +19,58 @@ class DownloadThread(threading.Thread):
         self.filename = filename
         self.pathToSave = pathToSave
         self.location_to_save = os.path.join(pathToSave, filename)
-        self.progress = None
-        self.timeRemaining = None
-        self.downloadSpeed = None
-        self.downloadPercentage = None
+        self.progress = 0.0        
 
     def __releaseAndExit(self):
         self.sema.release()
         exit()
 
-    def updateStatus(self, line):
-        value = codecs.encode(line, 'utf-8')
-        splitup = string.rsplit(value, " ")
+    def getProgress(self):
+        return self.progress   
 
-        if len(splitup) > 3:
-            self.timeRemaining = string.strip(splitup[len(splitup) -1])
-            self.downloadSpeed = string.strip(splitup[len(splitup) -2])
-            self.downloadPercentage = string.strip(splitup[len(splitup) -3])
-            if self.downloadPercentage == "": self.downloadPercentage = string.strip(splitup[len(splitup) -4])
+    def download(self,url):
+        def verifyValidUrl(header):
+            try:            
+                if header.status == 200:
+                    return True
+                else:
+                    return False
+            except:
+                return False
+
+        def getFileSize(header):
+            try:                            
+                file_size = header.headers['content-length']
+                return file_size
+            except:
+                return 0.0
+
+        try:
+            header = head(self.url)
+
+            if verifyValidUrl(header):
+                #Filesize (converted to MB's)
+                filesize = float( int(getFileSize()) / 1048576 )        
+                #http Get on the file location
+                download = get(url, stream=True)
+                #Update the current download 
+                downloaded = 0.0
+
+                with open(self.location_to_save, 'wb') as f:
+                    #Download and write in 1MB chunks - keeps memory down downloading 1MB chunk at a time
+                    for data_chunk in download.iter_content(chunk_size=1024000):
+                        if data_chunk:
+                            f.write(data_chunk)
+                            f.flush()
+                            downloaded = downloaded + 1.0
+                            #Get complete percentage
+                            self.progress = (downloaded/filesize) * 100                        
+                return save_location 
+            else:
+                logger.log("Invalid URL")    
+        except:
+            logger.log("Invalid URL")
+        
 
     def run(self):
         #Aquire a lock based on number of allowed concurrent processes
@@ -48,12 +82,11 @@ class DownloadThread(threading.Thread):
             self.location_to_save = os.path.join(self.pathToSave, "(" + str(somenumber) + ")" + self.filename)            
             somenumber = somenumber + 1
 
-        #Update the database to let everyone know we're now in downloading status
+        #Update status on DB
         database.updateJobStatus(int(self.threadID), "downloading")
         
-        try: 
-            p = sh.wget("-O",self.location_to_save, self.url, _err=self.updateStatus)
-            p.wait()
+        try:                        
+            self.download(self.url)
         except Exception, err:
             for error in err:
                 logger.log("Download Thread: " + str(self.threadID) + " - " + str(error))

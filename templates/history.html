@@ -5,20 +5,25 @@
 {%block body%}			
 	<div id="goodieBox">
 		<div id="queueTable">
-		    <table border = "1">	    	
+		    <table class="table table-bordered table-responsive">	    	
 		    	<th class="text-center statusTableHeader table_url">URL</th>
     			<th class="text-center statusTableHeader  status">Status</th>    			
     			<th class="text-center statusTableHeader added_on">Added On</th>
     			<th class="text-center statusTableHeader source">Source</th>				    	
-			       {% for row_id, url, status, time_left, time_queued, source in historical_queue_data %}
-			        <tr>
+			       {% for row_id, url, status, time_queued, source in historical_queue_data %}
+			       {% if status == "Successful"%}
+			       	 <tr class = "active">
+			       {% elif status == "Failed" %}
+			         <tr class = "danger">
+			       {% else %}
+			       	 <tr>
+			       {% endif %}
 			        	<td class="table_pad table_url">{{url}}</td>
 			        	<td class="table_pad status">{{status}}</td>			        	
 			        	<td class="table_pad added_on">{{time_queued}}</td>
 			        	<td class="table_pad source">{{source}}</td>					        	
 			        </tr>					       
-			        {% endfor %}
-			    	
+			        {% endfor %}			    	
 		    </table>
 		</div>
 	</div>					    	

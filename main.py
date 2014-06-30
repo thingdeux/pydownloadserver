@@ -78,6 +78,7 @@ class webServer(object):
         template = env.get_template('queue.html')                
         #DB query to get active jobs
         active_queue_results = database.getJobs("active")
+        
         #Render the jinja template and pass it the current_emails list variable
         return template.render(active_queue_data=active_queue_results)
 

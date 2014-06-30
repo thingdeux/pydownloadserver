@@ -24,8 +24,7 @@ def createFreshTables():
 	db = db_connection.cursor()
 		
 	db.execute('''CREATE TABLE jobs 
-			(id INTEGER PRIMARY KEY, url TEXT, status TEXT, time_left INTEGER,
-				time_queued INTEGER, source TEXT)''')
+			(id INTEGER PRIMARY KEY, url TEXT, status TEXT, time_queued TEXT, source TEXT)''')
 	db.execute('''CREATE TABLE config 
 			(id INTEGER PRIMARY KEY, config_type TEXT, name TEXT, value TEXT, html_tag TEXT, html_display_name)''')
 	db.execute(''' CREATE INDEX sourceIndex ON jobs(source ASC) ''')
@@ -52,17 +51,17 @@ def debugCreateTestData():
 
 	#Buid data string to insert
 	jobsData = [
-		(None, 'http://i.imgur.com/NRfBaS6.jpg', "Queued", 0, logger.getTime(), "email"),
-		(None, 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20Setup.exe', "Queued", 0, logger.getTime(), "email"),
-		(None, 'http://xxx.com/buttblasters11.avi', "Queued", 0, logger.getTime(), "email"),
-		(None, 'http://xxx.com/buttblasters21.avi', "Failed", 0, logger.getTime(), "email"),
-		(None, 'http://xxx.com/buttblasters1.avi', "Successful", 0, logger.getTime(), "web"),
-		(None, 'http://xxx.com/buttblasters2.avi', "Successful", 0, logger.getTime(), "web"),
-		(None, 'http://thisismeaddingaURL.com', "Downloading", 0, logger.getTime(), "email"),
-		(None, 'http://i.imgur.com/lOOw9rq.gif', "Downloading", 0, logger.getTime(), "web"),
-		(None, 'http://google.com/cockmunchers3.avi', "Queued", 0, logger.getTime(), "web"),
-		(None, 'http://xxx.com/buttblasters16.avi', "Successful", 0, logger.getTime(), "web"),
-		(None, 'http://xxx.com/buttblasters16.avi', "Failed", 0, logger.getTime(), "email"),			
+		(None, 'http://i.imgur.com/NRfBaS6.jpg', "Queued", logger.getTime(), "email"),
+		(None, 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20Setup.exe', "Queued", logger.getTime(), "email"),
+		(None, 'http://xxx.com/buttblasters11.avi', "Queued", logger.getTime(), "email"),
+		(None, 'http://xxx.com/buttblasters21.avi', "Failed", logger.getTime(), "email"),
+		(None, 'http://xxx.com/buttblasters1.avi', "Successful", logger.getTime(), "web"),
+		(None, 'http://xxx.com/buttblasters2.avi', "Successful", logger.getTime(), "web"),
+		(None, 'http://thisismeaddingaURL.com', "Downloading", logger.getTime(), "email"),
+		(None, 'http://i.imgur.com/lOOw9rq.gif', "Downloading", logger.getTime(), "web"),
+		(None, 'http://google.com/cockmunchers3.avi', "Queued", logger.getTime(), "web"),
+		(None, 'http://xxx.com/buttblasters16.avi', "Successful", logger.getTime(), "web"),
+		(None, 'http://xxx.com/buttblasters16.avi', "Failed", logger.getTime(), "email"),			
 	]		
 
 	configData = [
@@ -74,7 +73,7 @@ def debugCreateTestData():
 		
 	]
 
-	db.executemany('INSERT INTO jobs VALUES (?,?,?,?,?,?)', jobsData)
+	db.executemany('INSERT INTO jobs VALUES (?,?,?,?,?)', jobsData)
 	db.executemany('INSERT INTO config VALUES (?,?,?,?,?,?)', configData)
 
 	try:
@@ -122,9 +121,9 @@ def insertJob(url, source):
 		db_connection = connectToDB()
 		db = db_connection.cursor()
 		#Build job list to be inserted into DB		
-		job = [	(None, url, "Queued", 0, logger.getTime(), source)  ]		
+		job = [	(None, url, "Queued", logger.getTime(), source)  ]		
 		#iterate over list and create insert command for DB
-		db.executemany('INSERT INTO jobs VALUES (?,?,?,?,?,?)', job)			
+		db.executemany('INSERT INTO jobs VALUES (?,?,?,?,?)', job)			
 
 		try:
 			db_connection.commit()
@@ -227,7 +226,7 @@ def cleanUpAfterCrash():
 	try:
 		db_connection = connectToDB()
 		db = db_connection.cursor()
-		db.execute('UPDATE jobs SET status="Queued",time_left="" WHERE status="Downloading"')
+		db.execute('UPDATE jobs SET status="Queued" WHERE status="Downloading"')
 
 		db_connection.commit()
 		db.connection.close()

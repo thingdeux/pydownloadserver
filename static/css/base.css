@@ -51,9 +51,7 @@ body {
 .statusTableHeader{		
 	font-size: 14px;			
 	font-weight: bold;	
-	background-color: green;
-	border-style: solid;
-	border-color: black;
+	background-color: #006600;	
 	color:  #E3F8E3;	
 }
 
