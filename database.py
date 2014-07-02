@@ -99,7 +99,7 @@ def getJobs(resultRequested):
 						  ORDER BY "time_queued" ASC''')
 		elif resultRequested is "failed":
 			db.execute('''SELECT * from jobs WHERE status ="Failed" ''')
-		elif resultRequested is "succesful":
+		elif resultRequested is "successful":
 			db.execute('''SELECT * from jobs WHERE status = "Successful" ''')
 		elif resultRequested is "queued":
 			db.execute('''SELECT * from jobs WHERE status = "Queued" ''')
@@ -238,7 +238,7 @@ def cleanUpAfterCrash():
 
 def changeJobStatusByID(job_id, new_status):
 
-	if new_status in ('Succesful', 'Failed', 'Queued', 'Downloading'):
+	if new_status in ('Successful', 'Failed', 'Queued', 'Downloading'):
 
 		try:
 			db_connection = connectToDB()
@@ -267,6 +267,19 @@ def modifyConfigurationItemByName(config_parameter_name, new_value):
 		for error in err:
 			logger.log("Unable to get config info - " + error)
 			db_connection.close()
+
+def deleteHistory(kind="all"):	
+	db_connection = connectToDB()
+	db = db_connection.cursor()
+
+	if kind == "all":
+		#Delete everything in the table
+		db.execute('''DELETE FROM jobs WHERE status="Successful" OR status="Failed"''')
+	elif kind == "failed":
+		db.execute('''DELETE FROM jobs WHERE status="Failed"''')
+
+	db_connection.commit()
+	db.connection.close()
 
 if __name__ == "__main__":
 	test = getConfig()

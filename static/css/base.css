@@ -118,6 +118,12 @@ a.bigpylink:visited {text-decoration: none; color:black;}
 a.bigpylink:hover {text-decoration: none; color:black;}
 a.bigpylink:active {text-decoration: none; color:black;}
 
+.black-link, .black-link:hover, .black-link:active {
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+}
+	
 .nav > li > a:hover, .nav > li > a:focus {
     text-decoration: none;
     background-color: transparent;

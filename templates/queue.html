@@ -1,30 +1,40 @@
 {% extends "base.html" %}
 
 {% block title %}pyDownloader - Queue{% endblock %} 
+{% block extrahead %}<meta http-equiv="refresh" content="6">{% endblock %}
 
 {%block body %}	
 	<div id = "goodieBox">
-		<div id="queueTable">
-		    <table class="table table-bordered table-responsive">				    	
-		    	<th class="text-center statusTableHeader table_url">URL</th>
-		    	<th class="text-center statusTableHeader status">Status</th>	    	
-		    	<th class="text-center statusTableHeader status">Progress</th>
-		    	<th class="text-center statusTableHeader added_on">Added On</th>
-		    	<th class="text-center statusTableHeader source">Source</th>
-			       {% for row_id, url, status, time_queued, source in active_queue_data %}
-			        <tr>
-			        	<td class="table_pad">{{url}}</td>
-			        	<td class="table_pad">{{status}}</td>
-			        	{%if status == "Downloading" %}
-			        	<td class="table_pad text-center">{{ downloads.get(row_id|string) }}</td>
-			        	{%else%}
-			        	<td class="table_pad text-center"> -- </td>
-			        	{%endif%}
-			        	<td class="table_pad">{{time_queued}}</td>
-			        	<td class="table_pad">{{source}}</td>
-			        </tr>
-			        {%endfor%}	    
-		    </table>
+		<div class = "col-xs-10"></div>		
+
+		<div class = "col-xs-2 text-right control-panel">			
+			<a id= "pause_queue" class="black-link"><span class="glyphicon glyphicon-pause"></span>Pause Queue</a>			
+			<a id= "resume_queue" class="black-link hidden"><span class="glyphicon glyphicon-play"></span>Resume Queue</a>
+		</div>
+
+		<div class = "col-xs-12">
+			<div id="queueTable">			
+			    <table class="table table-bordered table-responsive">				    	
+			    	<th class="text-center statusTableHeader table_url">URL</th>
+			    	<th class="text-center statusTableHeader status">Status</th>	    	
+			    	<th class="text-center statusTableHeader status">Progress</th>
+			    	<th class="text-center statusTableHeader added_on">Added On</th>
+			    	<th class="text-center statusTableHeader source">Source</th>
+				       {% for row_id, url, status, time_queued, source in active_queue_data %}
+				        <tr>
+				        	<td class="table_pad">{{url}}</td>
+				        	<td class="table_pad">{{status}}</td>
+				        	{%if status == "Downloading" %}
+				        	<td class="table_pad text-center">{{ downloads.get(row_id|string)[:5] }}</td>
+				        	{%else%}
+				        	<td class="table_pad text-center"> -- </td>
+				        	{%endif%}
+				        	<td class="table_pad">{{time_queued}}</td>
+				        	<td class="table_pad">{{source}}</td>
+				        </tr>
+				        {%endfor%}	    
+			    </table>
+			</div>
 		</div>
 	</div>
 				

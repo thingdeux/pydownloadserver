@@ -68,7 +68,7 @@ def queueManager():
                     downloadContainer.daemon = True
                     downloadContainer.start() #start the thread
                     ACTIVE_DOWNLOADS.append(downloadContainer) #put it in a list to check on later        
-        time.sleep(15) #sleep for 15 seconds before we try to find new downloads again
+        time.sleep(5) #sleep for 15 seconds before we try to find new downloads again
 
 def getDownloads():
     return ACTIVE_DOWNLOADS

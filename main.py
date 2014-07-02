@@ -66,7 +66,13 @@ class webServer(object):
                 logger.log("Unable to queue: " + url)
 
     @cherrypy.expose
-    def history(self):
+    def history(self, *args, **kwargs):
+        try:            
+            if args[0] == "delete":                
+                database.deleteHistory("all")
+        except:
+            pass        
+
         #Create the below template using history.html
         template = env.get_template('history.html')
         historical_queue_results = database.getJobs("historical")                   
@@ -97,7 +103,7 @@ class webServer(object):
     @cherrypy.expose
     def shutdown(self):        
         template = env.get_template('shutdown.html')
-        return template.render()                
+        return template.render()
 
     @cherrypy.expose
     def stopServer(self):
