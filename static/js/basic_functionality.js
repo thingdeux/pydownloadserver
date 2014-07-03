@@ -2,18 +2,12 @@
 
 function attemptQueue() {
 	var returned_url = $("#addToQueueText").val();	
-
 	if (returned_url == "")	{	
 		//Make sure the queue box actually has text in it
 		$("#QueueErrorBox").html('Empty URL').hide().fadeIn();
 		setTimeout(function() { $("#QueueErrorBox").fadeOut(); }, 2500);
-	}
-	
-	else {
-
-		//Regular expression for url matching
-		var regular_expression = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-
+	}	
+	else {	
 		if ( returned_url.match(regular_expression) ) {
 			//Post verified URL To queue handler
 			var concatenated_string = "Sent:  " + returned_url + " to queue";
@@ -22,14 +16,7 @@ function attemptQueue() {
 
 			$("#addToQueueText").val("");
 			silentlySendDataWithPost("/addUrlToQueue", returned_url);
-		}
-		else
-		{
-			//Make sure the queue box actually has text in it
-			$("#QueueErrorBox").html('Not a valid URL').hide().fadeIn();
-			setTimeout(function() { $("#QueueErrorBox").fadeOut(); }, 2500);		
-		}
-
+		}		
 	}
 }
 
