@@ -131,7 +131,7 @@ def checkManager():
 def startWebServer():
     global manager
 
-    if database.verifyDatabaseExistence():
+    if database.verifyDatabaseExistence() and database.tableIntegrityCheck():
         try:
             manager = threading.Thread(target=queueManager)
             #Don't wait for thread to close on cherrypy exit stop method will run
@@ -156,8 +156,9 @@ def startWebServer():
             startWebServer()
         except Exception, err:
             for error in err:
-                logger.log("Unable to create DB: " + error)
+                logger.log("Unable to create DB: " + error)            
+                logger.log("Your database may be corrupt, delete .database.db and try again")
 
 if __name__ == "__main__":  
-    startWebServer()        
+    startWebServer()     
         

@@ -5,11 +5,60 @@ import logger
 current_path = os.path.dirname(os.path.abspath(__file__)	)
 db_path = os.path.join(current_path, '.database.db')
 
+def tableIntegrityCheck():
+	def verifyColumnsExist(pragma_list, check_list):
+		valid_table = True
+		try:
+			for checked_item in check_list:		
+				if (pragma_list[checked_item['column_location']][0] == checked_item['column_location'] and 
+					pragma_list[checked_item['column_location']][1] == checked_item['column_name']):
+					pass
+				else:
+					valid_table = False
+
+			return valid_table
+		except:
+			return False
+
+	db_connection = connectToDB()
+	db = db_connection.cursor()
+	db.execute('''PRAGMA table_info(config)''')
+	config_cols = db.fetchall()
+	db.execute('''PRAGMA table_info(jobs)''')
+	job_cols = db.fetchall()
+	db_connection.close()
+
+	config_check = [
+		{'column_location': 0, 'column_name': 'id'},
+		{'column_location': 1, 'column_name': 'config_type'},
+		{'column_location': 2, 'column_name': 'name'},
+		{'column_location': 3, 'column_name': 'value'},
+		{'column_location': 4, 'column_name': 'html_tag'},
+		{'column_location': 5, 'column_name': 'html_display_name'}]
+
+	job_check = [
+		{'column_location': 0, 'column_name': 'id'},
+		{'column_location': 1, 'column_name': 'url'},
+		{'column_location': 2, 'column_name': 'status'},
+		{'column_location': 3, 'column_name': 'time_queued'},
+		{'column_location': 4, 'column_name': 'source'},	
+	]
+
+	if (verifyColumnsExist(config_cols, config_check) == True and
+	   (verifyColumnsExist(job_cols, job_check)) == True):
+	   	return True
+	else:
+		return False
+
+
 def verifyDatabaseExistence():
-#Check to see if DB exists
+	#Check to see if DB exists
 	if (os.path.isfile(db_path) ):
 		try:
-			db_connection = sqlite3.connect(db_path)
+			db_connection = connectToDB()
+			db = db_connection.cursor()
+
+			#db.execute()
 			db_connection.close()
 			return(True)
 		except Exception, err:			
@@ -36,8 +85,7 @@ def createFreshTables():
 def connectToDB():
 	try:
 		#If DB doesn't exist create its tables and keys
-		db_connection = sqlite3.connect(db_path)
-		db = db_connection.cursor()				
+		db_connection = sqlite3.connect(db_path)						
 		return (db_connection)
 	except Exception, err:
 		for error in err:
@@ -50,23 +98,14 @@ def debugCreateTestData():
 	db = db_connection.cursor()
 
 	#Buid data string to insert
-	jobsData = [
-		(None, 'http://i.imgur.com/NRfBaS6.jpg', "Queued", logger.getTime(), "email"),
-		(None, 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20Setup.exe', "Queued", logger.getTime(), "email"),
-		(None, 'http://xxx.com/buttblasters11.avi', "Queued", logger.getTime(), "email"),
-		(None, 'http://xxx.com/buttblasters21.avi', "Failed", logger.getTime(), "email"),
-		(None, 'http://xxx.com/buttblasters1.avi', "Successful", logger.getTime(), "web"),
-		(None, 'http://xxx.com/buttblasters2.avi', "Successful", logger.getTime(), "web"),
-		(None, 'http://thisismeaddingaURL.com', "Downloading", logger.getTime(), "email"),
-		(None, 'http://i.imgur.com/lOOw9rq.gif', "Downloading", logger.getTime(), "web"),
-		(None, 'http://google.com/cockmunchers3.avi', "Queued", logger.getTime(), "web"),
-		(None, 'http://xxx.com/buttblasters16.avi', "Successful", logger.getTime(), "web"),
-		(None, 'http://xxx.com/buttblasters16.avi', "Failed", logger.getTime(), "email"),			
+	jobsData = [		
+		(None, 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20Setup.exe', "Queued", logger.getTime(), "email"),				
+		(None, 'http://i.imgur.com/lOOw9rq.gif', "Downloading", logger.getTime(), "web")
 	]		
 
 	configData = [
 		(None,'E-Mail', 'email_username', 'pydownloadserver', 'text', 'GMail Username:'),
-		(None,'E-Mail', 'email_password', 'Kaiser123', 'password', 'Gmail Password:'),
+		(None,'E-Mail', 'email_password', 'TestTest', 'password', 'Gmail Password:'),
 		(None,'General', 'download_path', current_path, 'text', "Download Location:"),
 		(None,'Server', 'server_host', '0.0.0.0', 'text', "Host:"),
 		(None,'Server', 'server_port', '12334', 'text', "Port")
@@ -281,8 +320,15 @@ def deleteHistory(kind="all"):
 	db_connection.commit()
 	db.connection.close()
 
+
+
+		
+		
+		
+
 if __name__ == "__main__":
-	test = getConfig()
-	for thing in test.keys():
-		print test[thing]
+	print tableIntegrityCheck()
+
+
+
 		
