@@ -114,6 +114,14 @@ class webServer(object):
         #Create the below template using config.html (and looking up in the static folder)
         setServerShuttingDown(True)
 
+    @cherrypy.expose
+    def debug(self, *args):        
+        all_vars = globals()
+        downloadies = getDownloads()
+        template = env.get_template('debug.html')        
+        return template.render(debug_info=all_vars, downloads=downloadies)
+
+
 def checkManager():
     #Register manager singleton as global
     global manager

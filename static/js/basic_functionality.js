@@ -27,7 +27,7 @@ function attemptQueue() {
 		{
 			//Make sure the queue box actually has text in it
 			$("#QueueErrorBox").html('Not a valid URL').hide().fadeIn();
-			setTimeout(function() { $("#QueueErrorBox").fadeOut(); }, 100);		
+			setTimeout(function() { $("#QueueErrorBox").fadeOut(); }, 2500);		
 		}
 
 	}
@@ -64,7 +64,7 @@ $(document).ready(function() {
 	/* --- History Page --- */
 	$("#clear_history").click(function() {		
 		silentlySendGet("history/delete/");
-		setTimeout(function() {location.reload();}, 2500);
+		setTimeout(function() {location.reload();}, 500);
 	})	
 });
 

@@ -48,27 +48,48 @@ def queueManager():
     
     if not os.path.isdir(TEMP_LOCATION):
 	    os.mkdir(TEMP_LOCATION)
-    
-    files_in_queued_status = []
-
+        
     while not isServerShuttingDown():
-        #find all files in queued status                
-        files_in_active_status = database.getJobs("active")
-        for files in files_in_active_status:
-            if files[2] == "Queued":
-                #Assigned DB table ID to UniqueID
-                uniqueID = files[0]                
-                url = files[1]
-                defaultFileName = makeDownloadFileName(url)
-                file_to_queue = [uniqueID, url]
-                
-                if not any(uniqueID in downloads for downloads in files_in_queued_status):
-                    files_in_queued_status.append(file_to_queue) #Keeping track of what I've queued
+        #Check for stopped jobs and remove them
+        purgeDownloads()
+
+        if len(getDownloads()) < MAX_NUMBER_OF_DOWNLOADS:        
+            #find all files in queued status
+            files_in_active_status = database.getJobs("active")        
+            
+            for files in files_in_active_status:
+                if files[2] == "Queued":
+                    #Assigned DB table ID to UniqueID
+                    uniqueID = files[0]
+                    url = files[1]
+                    defaultFileName = makeDownloadFileName(url)
                     downloadContainer = DownloadThread(url,TEMP_LOCATION, defaultFileName,uniqueID, download_semaphore)
-                    downloadContainer.daemon = True
-                    downloadContainer.start() #start the thread
-                    ACTIVE_DOWNLOADS.append(downloadContainer) #put it in a list to check on later        
-        time.sleep(5) #sleep for 15 seconds before we try to find new downloads again
+                    #Set thread daemon flag, if server shuts down thread will terminate
+                    downloadContainer.daemon = True                                
+                    #start the downloaded thread
+                    downloadContainer.start()                     
+                    #Add to active downloads list
+                    ACTIVE_DOWNLOADS.append(downloadContainer)
+                
+                #Don't create new threads if MAX_NUMBER_OF_DOWNLOADS has been reached.
+                if len(getDownloads()) >= MAX_NUMBER_OF_DOWNLOADS:
+                    break
+                    
+
+        #sleep for 1 seconds before trying to find new downloads
+        time.sleep(1)
 
 def getDownloads():
     return ACTIVE_DOWNLOADS
+
+def purgeDownloads():    
+    to_purge = []    
+    for download_thread in ACTIVE_DOWNLOADS:
+        if not download_thread.isAlive():
+            #Queue the thread for deletion, if it's deleted immediately iteration /
+            #May not complete properly.
+            to_purge.append(download_thread)
+    #Remove stopped downloads thread(s)
+    for download_thread in to_purge:
+        ACTIVE_DOWNLOADS.remove(download_thread)
+

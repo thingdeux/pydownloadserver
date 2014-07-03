@@ -23,7 +23,7 @@ class DownloadThread(threading.Thread):
 
     def __releaseAndExit(self):
         self.sema.release()
-        exit()
+        raise SystemExit
 
     def getProgress(self):
         return self.progress   
@@ -65,7 +65,10 @@ class DownloadThread(threading.Thread):
                             downloaded = downloaded + 1.0
                             #Get complete percentage
                             if filesize > 0.0:
-                                self.progress = (downloaded/filesize) * 100
+                                if self.progress < 100:
+                                    self.progress = (downloaded/filesize) * 100
+                                elif self.progress >= 100:
+                                    self.progress = 100                                
                             else:
                                 self.progress = "--"
                 return self.location_to_save
@@ -73,8 +76,7 @@ class DownloadThread(threading.Thread):
                 logger.log("Invalid URL")    
         except Exception, err:
             for error in err:
-                logger.log("Invalid URL - " + error)
-        
+                logger.log("Invalid URL - " + str(error) )
 
     def run(self):
         #Aquire a lock based on number of allowed concurrent processes
@@ -98,6 +100,7 @@ class DownloadThread(threading.Thread):
         database.updateJobStatus(self.threadID, "successful")
         #following releases the lock so we can fire the next download
         self.__releaseAndExit()
+        return 0
 
 def makeDownloadFileName(url):
     downloadFileName = url.split('/')[-1]

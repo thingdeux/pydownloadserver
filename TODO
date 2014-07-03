@@ -1,8 +1,4 @@
-Make sure to clear http connection on complete download | Free Up Download threads if nothing is happening.
-	*After clearing queue and queuing up a bunch of the same things back to back - downloads don't start they just sit.
-	(File I've been using - http://i.imgur.com/XZEbv9u.png)
 
-If the size of the URL isn't very big (ie: It looks like just a page and not a binary) - don't queue
  
 
 
