@@ -22,86 +22,85 @@ env = Environment(loader=PackageLoader('main', 'templates'))
 #Global manager singleton for handling thread var
 manager = 0
 
-cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
-                         'server.socket_port': 8000,                        
-                         })
+cherrypy.config.update({'server.socket_host': '0.0.0.0',
+                        'server.socket_port': 8000
+                        })
 
-conf = {         
-        '/static': { 'tools.staticdir.on' : True,
-                      'tools.staticdir.dir': os.path.join(current_folder, 'static')
+conf = {
+        '/static': {'tools.staticdir.on': True,
+                    'tools.staticdir.dir': os.path.join(current_folder, 'static')
                     },
-         '/static/css': { 'tools.staticdir.on' : True,
-                          'tools.staticdir.dir': os.path.join(current_folder, 'static/css')
+        '/static/css': {'tools.staticdir.on': True,
+                        'tools.staticdir.dir': os.path.join(current_folder, 'static/css')
                         },
-         '/static/js': { 'tools.staticdir.on' : True,
-                      'tools.staticdir.dir': os.path.join(current_folder, 'static/js')
-                    },
-         '/static/js/lib': { 'tools.staticdir.on' : True,
+        '/static/js': {'tools.staticdir.on': True,
+                        'tools.staticdir.dir': os.path.join(current_folder, 'static/js')
+                        },
+        '/static/js/lib': {'tools.staticdir.on': True,
                           'tools.staticdir.dir': os.path.join(current_folder, 'static/js/lib')
                         },
-        'favicon.ico': {
-                        'tools.staticfile.on': True,
+        'favicon.ico': {'tools.staticfile.on': True,
                         'tools.staticfile.filename': os.path.join(current_folder, "static/favicon.ico")
                         }
         }
+
 
 class webServer(object):
     def __init__(self):
         cherrypy.engine.subscribe('stop', self.stop)
 
     @cherrypy.expose
-    def index(self, **arguments):       
-        #Create the below template using index.html        
-        template = env.get_template('index.html')                                   
-        return template.render()            
-        
+    def index(self, **arguments):
+        #Create the below template using index.html
+        template = env.get_template('index.html')
+        return template.render()
 
     @cherrypy.expose
     def addUrlToQueue(self, **kwargs):
-        try:            
+        try:
             for url in kwargs:
-                queueDownload(url)                            
+                queueDownload(url)
         except:
-            for url in kwargs:                
+            for url in kwargs:
                 logger.log("Unable to queue: " + url)
 
     @cherrypy.expose
     def history(self, *args, **kwargs):
-        try:            
-            if args[0] == "delete":                
+        try:
+            if args[0] == "delete":
                 database.deleteHistory("all")
         except:
-            pass        
+            pass
 
         #Create the below template using history.html
         template = env.get_template('history.html')
-        historical_queue_results = database.getJobs("historical")                   
-        return template.render(historical_queue_data = historical_queue_results)
+        historical_queue_results = database.getJobs("historical")
+        return template.render(historical_queue_data=historical_queue_results)
 
     @cherrypy.expose
-    def queue(self):       
+    def queue(self):
         #Create the below template using queue.html
-        template = env.get_template('queue.html')                
+        template = env.get_template('queue.html')
         #DB query to get active jobs
         active_queue_results = database.getJobs("active")
-        downloads = {}  
+        downloads = {}
         for active_thread in getDownloads():
-            downloads[str(active_thread.threadID)] = str(active_thread.getProgress())            
-        
+            downloads[str(active_thread.threadID)] = str(active_thread.getProgress())
+
         #Render the jinja template and pass it the current_emails list variable
         return template.render(active_queue_data=active_queue_results, downloads=downloads)
 
     @cherrypy.expose
     def config(self):
-        #Create the below template using config.html (and looking up in the static folder)        
-        template = env.get_template('config.html')        
+        #Create the below template using config.html (and looking up in the static folder)
+        template = env.get_template('config.html')
         #DB query to get current parameters
-        config_parameters = database.getConfig()        
-        
+        config_parameters = database.getConfig()
+
         return template.render(config_data=config_parameters)
 
     @cherrypy.expose
-    def shutdown(self):        
+    def shutdown(self):
         template = env.get_template('shutdown.html')
         return template.render()
 
@@ -115,18 +114,19 @@ class webServer(object):
         setServerShuttingDown(True)
 
     @cherrypy.expose
-    def debug(self, *args):        
+    def debug(self, *args):
         all_vars = globals()
         downloadies = getDownloads()
-        template = env.get_template('debug.html')        
+        template = env.get_template('debug.html')
         return template.render(debug_info=all_vars, downloads=downloadies)
 
 
 def checkManager():
     #Register manager singleton as global
     global manager
-    if not manager.isAlive() and not isServerShuttingDown():                            
-        manager.start()    
+    if not manager.isAlive() and not isServerShuttingDown():
+        manager.start()
+
 
 def startWebServer():
     global manager
@@ -136,14 +136,14 @@ def startWebServer():
             manager = threading.Thread(target=queueManager)
             #Don't wait for thread to close on cherrypy exit stop method will run
             #And set the serverShuttingDown global to True then the thread will exit
-            manager.daemon = True             
+            manager.daemon = True
             manager.start()
 
             #Register cherrypy monitor - runs every 30 seconds
             EventScheduler = Monitor(cherrypy.engine, checkManager, 30, 'EventScheduler')
-            EventScheduler.start()   
+            EventScheduler.start()
 
-            cherrypy.quickstart(webServer(), config=conf)        
+            cherrypy.quickstart(webServer(), config=conf)
         except Exception, err:
             for error in err:
                 logger.log("Unable to start Web Server - " + str(error))
@@ -156,9 +156,8 @@ def startWebServer():
             startWebServer()
         except Exception, err:
             for error in err:
-                logger.log("Unable to create DB: " + error)            
+                logger.log("Unable to create DB: " + error)
                 logger.log("Your database may be corrupt, delete .database.db and try again")
 
-if __name__ == "__main__":  
-    startWebServer()     
-        
+if __name__ == "__main__":
+    startWebServer()

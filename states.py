@@ -1,14 +1,14 @@
 __author__ = 'josh'
 shutdownServer = False
 
-def isServerShuttingDown():	
-	global shutdownServer
-	return shutdownServer
+def isServerShuttingDown(): 
+    global shutdownServer
+    return shutdownServer
 
 def setServerShuttingDown(status):
-	global shutdownServer
-	shutdownServer = status
+    global shutdownServer
+    shutdownServer = status
 
 def downloadStatus():
-	#get active downloads
-	return ("Active")
+    #get active downloads
+    return ("Active")

@@ -14,14 +14,14 @@ TEMP_LOCATION = os.path.join(CURRENT_DIR, 'tmp')
 ACTIVE_DOWNLOADS = []
 
 def queueDownload(url, source="web"):
-	try:
-		#Gather the file name from the URL		
-		logger.log("downloader Received Queue req: " + url + " | " + source)
-		downloadFileName = url.split('/')[-1]
-		database.insertJob(url, source)
-	except Exception, err:
-		for error in err:
-			logger.log("Unable to queue url - " + error)
+    try:
+        #Gather the file name from the URL      
+        logger.log("downloader Received Queue req: " + url + " | " + source)
+        downloadFileName = url.split('/')[-1]
+        database.insertJob(url, source)
+    except Exception, err:
+        for error in err:
+            logger.log("Unable to queue url - " + error)
 
 def makeDownloadFileName(url):
     downloadFileName = url.split('/')[-1]
@@ -47,7 +47,7 @@ def queueManager():
     download_semaphore=threading.BoundedSemaphore(value=MAX_NUMBER_OF_DOWNLOADS)
     
     if not os.path.isdir(TEMP_LOCATION):
-	    os.mkdir(TEMP_LOCATION)
+        os.mkdir(TEMP_LOCATION)
         
     while not isServerShuttingDown():
         #Check for stopped jobs and remove them
