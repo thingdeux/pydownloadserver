@@ -22,7 +22,7 @@
 			    	<th class="text-center statusTableHeader source">Source</th>
 				       {% for row_id, url, status, time_queued, source in active_queue_data %}
 				        <tr>
-				        	<td class="table_pad">{{url}}</td>
+				        	<td class="table_pad">{{url[:150]}}</td>
 				        	<td class="table_pad">{{status}}</td>
 				        	{%if status == "Downloading" %}
 				        	<td class="table_pad text-center">{{ downloads.get(row_id|string)[:5] }}</td>
