@@ -1,5 +1,5 @@
 #pyDownloadServer - Python web downloader
-#Library Requirements: jinja2, cherrypy, sh
+#Library Requirements: jinja2, cherrypy
 
 
 
@@ -18,27 +18,5 @@
 **downloadManager.py** (handler for download events)
 	-queueDownload(url, source = "web") - function to use when requesting a job queue for a url
 
-**database.py**  functions for directly interacting with the sqllite3 DB
-
-	-verifyDatabaseExistence() - Used on server startup to make sure DB exists.  
-	-createFreshTables() - called by server to create a new,empty table with schema  
-	-getConfig(parameter) - If called with no parameter, returns all config items, otherwise specify a string for name and a config item list will be returned.
-			List Contents: id | config_type (ex: general, server, e-mail) | name (ex: email_password, server_host) | value | html_tag | html_display_name
-			Example use: getConfig('email_username')  -or- getConfig()
-	-getJobs(requestedJob) -returns python list of jobs in the queue - can be passed the following params:  
-
-			1.	all  
-			2.	active  (returns all queued & downloading)
-			3.  queued (returns all queued only)
-			4.	historical  (returns all succesful/failed)
-			5.	failed  (returns all failed)
-			6.	succesful  (returns all succesful)  
-	-changeJobStatusByID(id, new_status) - set the status of a job by passing it the DB id and new status.
-	-modifyConfigurationItemByName(config_parameter_name, new_value) - set the value of a configuration parameter by passing the name and value.
-
-	-insertJob(url, source) -Insert a job into the download queue - (ex: of source can be web or email)  
-
-
-
-
+**database.py**  functions for directly interacting with the DB
 	
