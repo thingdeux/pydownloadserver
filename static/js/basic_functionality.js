@@ -7,16 +7,14 @@ function attemptQueue() {
 		$("#QueueErrorBox").html('Empty URL').hide().fadeIn();
 		setTimeout(function() { $("#QueueErrorBox").fadeOut(); }, 2500);
 	}	
-	else {	
-		if ( returned_url.match(regular_expression) ) {
-			//Post verified URL To queue handler
-			var concatenated_string = "Sent:  " + returned_url + " to queue";
-			$("#QueueErrorBox").html(concatenated_string).hide().fadeIn();
-			setTimeout(function() { $("#QueueErrorBox").fadeOut(); }, 2500);
+	else {			
+		//Post verified URL To queue handler
+		var concatenated_string = "Sent:  " + returned_url + " to queue";
+		$("#QueueErrorBox").html(concatenated_string).hide().fadeIn();
+		setTimeout(function() { $("#QueueErrorBox").fadeOut(); }, 2500);
 
-			$("#addToQueueText").val("");
-			silentlySendDataWithPost("/addUrlToQueue", returned_url);
-		}		
+		$("#addToQueueText").val("");
+		silentlySendDataWithPost("/addUrlToQueue", returned_url);		
 	}
 }
 

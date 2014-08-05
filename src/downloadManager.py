@@ -9,8 +9,8 @@ from DownloadThread import DownloadThread
 
 # Global values
 MAX_NUMBER_OF_DOWNLOADS = 2
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-TEMP_LOCATION = os.path.join(CURRENT_DIR, 'tmp')
+TEMP_LOCATION = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                '..', 'Downloads'))
 ACTIVE_DOWNLOADS = []
 
 

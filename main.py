@@ -1,17 +1,16 @@
 __author__ = 'josh'
 import cherrypy
 import os
-from downloadManager import queueDownload, queueManager, getDownloads
-import logger
-import database
+from src.downloadManager import queueDownload, queueManager, getDownloads
+from src.logger import log
+import src.database as database
 import threading
 from cherrypy.process.plugins import Monitor
-from states import isServerShuttingDown
-from states import setServerShuttingDown
+from src.states import isServerShuttingDown, setServerShuttingDown
 from jinja2 import Environment, PackageLoader
 
 
-VERSION = "0.3"
+VERSION = "0.75"
 CURRENT_STATE = "debug"
 
 # bind to all IPv4 interfaces and set port
@@ -66,7 +65,7 @@ class webServer(object):
                 queueDownload(url)
         except:
             for url in kwargs:
-                logger.log("Unable to queue: " + url)
+                log("Unable to queue: " + url)
 
     @cherrypy.expose
     def history(self, *args, **kwargs):
@@ -91,7 +90,7 @@ class webServer(object):
         for active_thread in getDownloads():
             downloads[str(active_thread.threadID)] = str(active_thread.getProgress())  # noqa
 
-        # ender the jinja template and pass it the current_emails list variable
+        # Render the template and pass it the current_emails list variable
         return template.render(active_queue_data=active_queue_results,
                                downloads=downloads)
 
@@ -115,7 +114,6 @@ class webServer(object):
         cherrypy.engine.exit()
 
     def stop(self):
-        # Create the below template using config.html
         setServerShuttingDown(True)
 
     @cherrypy.expose
@@ -146,6 +144,9 @@ def startWebServer():
             manager.start()
 
             # Register cherrypy monitor - runs every 30 seconds
+            # The monitor will check to make sure the download manager
+            # Is still active. If it is not and a shutdown has been requested
+            # It will terminate the daemon, else it will start a manager.
             EventScheduler = Monitor(cherrypy.engine, checkManager,
                                      30, 'EventScheduler')
             EventScheduler.start()
@@ -153,7 +154,7 @@ def startWebServer():
             cherrypy.quickstart(webServer(), config=conf)
         except Exception, err:
             for error in err:
-                logger.log("Unable to start Web Server - " + str(error))
+                log("Unable to start Web Server - " + str(error))
     else:
         try:
             # Database doesn't exist, create it then recursively try again
@@ -163,8 +164,8 @@ def startWebServer():
             startWebServer()
         except Exception, err:
             for error in err:
-                logger.log("Unable to create DB: " + error)
-                logger.log("Your database may be corrupt, \
+                log("Unable to create DB: " + error)
+                log("Your database may be corrupt, \
                             delete .database.db and try again")
 
 if __name__ == "__main__":
