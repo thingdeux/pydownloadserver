@@ -1,22 +1,14 @@
-#pyDownloadServer - Python web downloader
-#Library Requirements: jinja2, cherrypy
+#pyDownloadServer
+##Python web daemon for http downloads
+###Library Requirements: jinja2, cherrypy
+-------------------------------------------
+<img src="https://raw.github.com/thingdeux/pydownloadserver/master/example.png"></img>
 
+##Summary
+This project came about as a way to help a friend (Jason) get into python development. His slow internet connection made it very difficult for him to download large files off websites without leaving his computer on indefinitely.  I decided to use his NAS devices ability to run python code as a jumping off point for creating a file downloading web daemon.
 
+##Of Note
 
+Low Memory Overhead<br>
+Ability to queue a download remotely by simply e-mailing an attached e-mail account
 
-#Current Dev Notes
-**pyDownloader** (Web Daemon) - Run pyDownloader.py to start cherrypy server, port: 8000
-	startWebServer() -Starts web server with checks for DB connection. Attempts to create local .database.db file if none exists.
-
-**emailCrawl.py** (e-mail crawling helper)
-    -queueAllEmailInbox() - function to use to kickoff crawling of e-mail inbox,pull download urls and queue them for download.  
-    -listAllEmails() - function to return a list of all found urls in the inbox
-
-
-**DownloadThread.py** (class definition for individual downloads)
-
-**downloadManager.py** (handler for download events)
-	-queueDownload(url, source = "web") - function to use when requesting a job queue for a url
-
-**database.py**  functions for directly interacting with the DB
-	
